@@ -28,7 +28,9 @@ int fnds;
 int tactSw;
 int dotMtx;
 int a = 0b0101010;
-vector<unsigned char> figure {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0x00}; //E
+vector<unsigned char> figure {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0xff}; //E
+vector<unsigned char> figure2 {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0xff, 0xff};
+vector<unsigned char> figure3 {0x7E, 0x60, 0x60, 0x7C, 0x60, 0xff, 0xff, 0xff};
 
 int main() {
     printClcd("Press any key to start Game");
@@ -50,7 +52,21 @@ int main() {
     while( startTime - currentTime < 5000 ){ //5000ms
         drawDotMTX(figure, 450000);
         currentTime = clock();
-    } 
+    }
+
+    startTime = clock();
+    currentTime = clock();
+    while( startTime - currentTime < 5000 ){ //5000ms
+        drawDotMTX2(figure2, 450000);
+        currentTime = clock();
+    }
+
+    startTime = clock();
+    currentTime = clock();
+    while( startTime - currentTime < 5000 ){ //5000ms
+        drawDotMTX3(figure3, 450000);
+        currentTime = clock();
+    }
 
     printClcd("Press any key to terminate Program");
     while (true){
@@ -74,7 +90,7 @@ int printClcd(string str){
         return -1; 
     }
 
-    if (write(clcds, str.c_str(), str.size() * sizeof(char) == -1)){
+    if (write(clcds, str.c_str(), str.size()) == -1){
         std::cout << "file write error" << std::endl; // str.size()이 걸로 되는지 모르겠음
         return -1;
     } 
@@ -99,7 +115,36 @@ int drawDotMTX(vector<unsigned char>& input, uint32_t sleepSec){
         std::cout << "can't find Dev dirver" << std::endl;
         return -1; 
     }
-    write(dotMtx, &input, sizeof(input));
+    write(dotMtx, &input, input.size() * sizeof(unsigned char));
+    usleep(sleepSec);
+    close(dotMtx);
+    return 0;
+}
+
+int drawDotMTX2(vector<unsigned char>& input, uint32_t sleepSec){
+    dotMtx = open(dot, O_RDWR);
+    if (dotMtx < 0) {
+        std::cout << "can't find Dev dirver" << std::endl;
+        return -1; 
+    }
+    unsigned char* temp = input.data();
+    write(dotMtx, &temp, sizeof(temp));
+    usleep(sleepSec);
+    close(dotMtx);
+    return 0;
+}
+
+int drawDotMTX3(vector<unsigned char>& input, uint32_t sleepSec){
+    dotMtx = open(dot, O_RDWR);
+    if (dotMtx < 0) {
+        std::cout << "can't find Dev dirver" << std::endl;
+        return -1; 
+    }
+    unsigned char temp[8];
+    for (int i=0; i < 8; i++){
+        temp[i] = input[i];
+    }
+    write(dotMtx, &temp, sizeof(temp));
     usleep(sleepSec);
     close(dotMtx);
     return 0;
