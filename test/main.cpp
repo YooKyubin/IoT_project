@@ -73,7 +73,7 @@ int printClcd(string str){
         return -1; 
     }
 
-    if (write(clcds, str.c_str(), str.size()) == -1){
+    if (write(clcds, str.c_str(), str.size() * sizeof(char) == -1){
         std::cout << "file write error" << std::endl; // str.size()이 걸로 되는지 모르겠음
         return -1;
     } 
