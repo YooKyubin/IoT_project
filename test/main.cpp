@@ -7,6 +7,7 @@
 // #include<sys/ioctl.h> 		// 하드웨어의 제어와 상태 정보
 #include<sys/stat.h> 		// 파일의 상태에 대한 정보
 #include <time.h> 			// 시간 관련
+#include <stdint.h>
 
 #define fnd "/dev/fnd" 		// 7-Segment FND 
 #define dot "/dev/dot" 		// Dot Matrix
@@ -27,7 +28,7 @@ int fnds;
 int tactSw;
 int dotMtx;
 int a = 0b0101010;
-vector<unsigned char> figure = {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0x00}; //E
+vector<unsigned char> figure {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0x00}; //E
 
 int main() {
     printClcd("Press any key to start Game");
@@ -73,7 +74,7 @@ int printClcd(string str){
         return -1; 
     }
 
-    if (write(clcds, str.c_str(), str.size() * sizeof(char) == -1){
+    if (write(clcds, str.c_str(), str.size() * sizeof(char) == -1)){
         std::cout << "file write error" << std::endl; // str.size()이 걸로 되는지 모르겠음
         return -1;
     } 
@@ -83,7 +84,7 @@ int printClcd(string str){
 
 int getTactSw(unsigned char& input){
     tactSw = open(tact, O_RDWR);
-    if (tact < 0) {
+    if (tactSw < 0) {
         std::cout << "can't find Dev driver" << std::endl;
         return -1;
     }
@@ -98,7 +99,7 @@ int drawDotMTX(vector<unsigned char>& input, uint32_t sleepSec){
         std::cout << "can't find Dev dirver" << std::endl;
         return -1; 
     }
-    write(dotMtx, input.data(), sizeof(input));
+    write(dotMtx, &input, sizeof(input));
     usleep(sleepSec);
     close(dotMtx);
     return 0;
