@@ -51,7 +51,7 @@ int main() {
     startTime = clock();
     currentTime = clock();
     cout << "dot1 run" << endl;
-    while( currentTime - startTime < 5000 ){ //5000ms
+    while( currentTime - startTime < 3000000 ){ //5000ms
         drawDotMTX(*figure, 450000);
         currentTime = clock();
     }
@@ -59,7 +59,7 @@ int main() {
     cout << "dot2 run" << endl;
     startTime = clock();
     currentTime = clock();
-    while( currentTime - startTime < 5000 ){ //5000ms
+    while( currentTime - startTime < 3000000 ){ //5000ms
         drawDotMTX2(figure2, 450000);
         currentTime = clock();
     }
@@ -67,7 +67,7 @@ int main() {
     cout << "dot3 run" << endl;
     startTime = clock();
     currentTime = clock();
-    while( currentTime - startTime < 5000 ){ //5000ms
+    while( currentTime - startTime < 3000000 ){ //5000ms
         drawDotMTX3(*figure3, 450000);
         currentTime = clock();
     }
