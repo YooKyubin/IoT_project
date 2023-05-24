@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <vector>
+
 #include<unistd.h> 			// POSIX 운영체제 API에 대한 액세스 제공
 #include<fcntl.h> 			// 타겟시스템 입출력 장치 관련
 #include<sys/types.h> 		// 시스템에서 사용하는 자료형 정보
@@ -29,9 +29,9 @@ int fnds;
 int tactSw;
 int dotMtx;
 int a = 0b0101010;
-vector<unsigned char> figure {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0xff}; //E
-vector<unsigned char> figure2 {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0xff, 0xff};
-vector<unsigned char> figure3 {0x7E, 0x60, 0x60, 0x7C, 0x60, 0xff, 0xff, 0xff};
+unsigned char figure[] = {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0xff}; //E
+unsigned char figure2[] = {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0xff, 0xff};
+unsigned char figure3[] = {0x7E, 0x60, 0x60, 0x7C, 0x60, 0xff, 0xff, 0xff};
 
 int main() {
     printClcd("Press any key to start Game");
@@ -51,7 +51,7 @@ int main() {
     startTime = clock();
     currentTime = clock();
     while( startTime - currentTime < 5000 ){ //5000ms
-        drawDotMTX(figure, 450000);
+        drawDotMTX(*figure, 450000);
         currentTime = clock();
     }
 
@@ -65,7 +65,7 @@ int main() {
     startTime = clock();
     currentTime = clock();
     while( startTime - currentTime < 5000 ){ //5000ms
-        drawDotMTX3(figure3, 450000);
+        drawDotMTX3(*figure3, 450000);
         currentTime = clock();
     }
 
@@ -110,42 +110,38 @@ int getTactSw(unsigned char& input){
     return 0;
 }
 
-int drawDotMTX(vector<unsigned char>& input, unsigned int sleepSec){
+int drawDotMTX(unsigned char& input, unsigned int sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
         cout << "can't find Dev dirver" << endl;
         return -1; 
     }
-    write(dotMtx, &input, input.size() * sizeof(unsigned char));
+    write(dotMtx, &input, sizeof(input));
     usleep(sleepSec);
     close(dotMtx);
     return 0;
 }
 
-int drawDotMTX2(vector<unsigned char>& input, unsigned int sleepSec){
+int drawDotMTX2(unsigned char input[], unsigned int sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
         cout << "can't find Dev dirver" << endl;
         return -1; 
     }
-    unsigned char* temp = input.data();
-    write(dotMtx, &temp, sizeof(temp));
+    write(dotMtx, &input, sizeof(input));
     usleep(sleepSec);
     close(dotMtx);
     return 0;
 }
 
-int drawDotMTX3(vector<unsigned char>& input, unsigned int sleepSec){
+int drawDotMTX3(unsigned char input, unsigned int sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
         cout << "can't find Dev dirver" << endl;
         return -1; 
     }
-    unsigned char temp[8];
-    for (int i=0; i < 8; i++){
-        temp[i] = input[i];
-    }
-    write(dotMtx, &temp, sizeof(temp));
+
+    write(dotMtx, &input, sizeof(input));
     usleep(sleepSec);
     close(dotMtx);
     return 0;
