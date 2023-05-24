@@ -19,9 +19,9 @@ using namespace std;
 
 int printClcd(string str);
 int getTactSw(unsigned char& input);
-int drawDotMTX(vector<unsigned char>& input, unsigned int sleepSec);
-int drawDotMTX2(vector<unsigned char>& input, unsigned int sleepSec);
-int drawDotMTX3(vector<unsigned char>& input, unsigned int sleepSec);
+int drawDotMTX(unsigned char& input, unsigned int sleepSec);
+int drawDotMTX2(unsigned char input[], unsigned int sleepSec);
+int drawDotMTX3(unsigned char input, unsigned int sleepSec);
 
 int clcds;
 int dipSw;
