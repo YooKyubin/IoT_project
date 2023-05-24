@@ -22,7 +22,7 @@ int printClcd(string str);
 int getTactSw(unsigned char& input);
 int drawDotMTX(vector<unsigned char>& input, uint32_t sleepSec);
 int drawDotMTX2(vector<unsigned char>& input, uint32_t sleepSec);
-int drawDotMTX2(vector<unsigned char>& input, uint32_t sleepSec);
+int drawDotMTX3(vector<unsigned char>& input, uint32_t sleepSec);
 
 int clcds;
 int dipSw;
