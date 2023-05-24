@@ -50,21 +50,21 @@ int main() {
     int startTime, currentTime;
     startTime = clock();
     currentTime = clock();
-    while( startTime - currentTime < 5000 ){ //5000ms
+    while( currentTime - startTime < 5000 ){ //5000ms
         drawDotMTX(*figure, 450000);
         currentTime = clock();
     }
 
     startTime = clock();
     currentTime = clock();
-    while( startTime - currentTime < 5000 ){ //5000ms
+    while( currentTime - startTime < 5000 ){ //5000ms
         drawDotMTX2(figure2, 450000);
         currentTime = clock();
     }
 
     startTime = clock();
     currentTime = clock();
-    while( startTime - currentTime < 5000 ){ //5000ms
+    while( currentTime - startTime < 5000 ){ //5000ms
         drawDotMTX3(*figure3, 450000);
         currentTime = clock();
     }
