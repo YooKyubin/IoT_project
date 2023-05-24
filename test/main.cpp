@@ -16,7 +16,7 @@
 #define dip "/dev/dipsw"	// Dip Switch
 #define clcd "/dev/clcd" 	// Character LCD
 
-using std::string, std::vector;
+using namespace std;
 
 int printClcd(string str);
 int getTactSw(unsigned char& input);
@@ -39,7 +39,7 @@ int main() {
         getTactSw(tactSwInput);
         if (tactSwInput == 0) continue;
         else{
-            std::cout << "Current tact switch input : " << tactSwInput << std::endl;
+            cout << "Current tact switch input : " << tactSwInput << endl;
             break;
         }
     }
@@ -74,7 +74,7 @@ int main() {
         getTactSw(tactSwInput);
         if (tactSwInput == 0) continue;
         else{
-            std::cout << "Current tact switch input : " << tactSwInput << std::endl;
+            cout << "Current tact switch input : " << tactSwInput << endl;
             break;
         }
     }
@@ -86,12 +86,12 @@ int printClcd(string str){
     clcds = open(clcd, O_RDWR);
 
     if (clcds < 0){
-        std::cout << "can't find Dev dirver" << std::endl;
+        cout << "can't find Dev dirver" << endl;
         return -1; 
     }
 
     if (write(clcds, str.c_str(), str.size()) == -1){
-        std::cout << "file write error" << std::endl; // str.size()이 걸로 되는지 모르겠음
+        cout << "file write error" << endl; // str.size()이 걸로 되는지 모르겠음
         return -1;
     } 
     close(clcds);
@@ -101,7 +101,7 @@ int printClcd(string str){
 int getTactSw(unsigned char& input){
     tactSw = open(tact, O_RDWR);
     if (tactSw < 0) {
-        std::cout << "can't find Dev driver" << std::endl;
+        cout << "can't find Dev driver" << endl;
         return -1;
     }
     read(tactSw, &input, sizeof(input));
@@ -112,7 +112,7 @@ int getTactSw(unsigned char& input){
 int drawDotMTX(vector<unsigned char>& input, uint32_t sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
-        std::cout << "can't find Dev dirver" << std::endl;
+        cout << "can't find Dev dirver" << endl;
         return -1; 
     }
     write(dotMtx, &input, input.size() * sizeof(unsigned char));
@@ -124,7 +124,7 @@ int drawDotMTX(vector<unsigned char>& input, uint32_t sleepSec){
 int drawDotMTX2(vector<unsigned char>& input, uint32_t sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
-        std::cout << "can't find Dev dirver" << std::endl;
+        cout << "can't find Dev dirver" << endl;
         return -1; 
     }
     unsigned char* temp = input.data();
@@ -137,7 +137,7 @@ int drawDotMTX2(vector<unsigned char>& input, uint32_t sleepSec){
 int drawDotMTX3(vector<unsigned char>& input, uint32_t sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
-        std::cout << "can't find Dev dirver" << std::endl;
+        cout << "can't find Dev dirver" << endl;
         return -1; 
     }
     unsigned char temp[8];
