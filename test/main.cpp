@@ -7,7 +7,6 @@
 // #include<sys/ioctl.h> 		// 하드웨어의 제어와 상태 정보
 #include<sys/stat.h> 		// 파일의 상태에 대한 정보
 #include <time.h> 			// 시간 관련
-#include <stdint.h>
 
 #define fnd "/dev/fnd" 		// 7-Segment FND 
 #define dot "/dev/dot" 		// Dot Matrix
@@ -20,9 +19,9 @@ using namespace std;
 
 int printClcd(string str);
 int getTactSw(unsigned char& input);
-int drawDotMTX(vector<unsigned char>& input, uint32_t sleepSec);
-int drawDotMTX2(vector<unsigned char>& input, uint32_t sleepSec);
-int drawDotMTX3(vector<unsigned char>& input, uint32_t sleepSec);
+int drawDotMTX(vector<unsigned char>& input, unsigned int sleepSec);
+int drawDotMTX2(vector<unsigned char>& input, unsigned int sleepSec);
+int drawDotMTX3(vector<unsigned char>& input, unsigned int sleepSec);
 
 int clcds;
 int dipSw;
@@ -111,7 +110,7 @@ int getTactSw(unsigned char& input){
     return 0;
 }
 
-int drawDotMTX(vector<unsigned char>& input, uint32_t sleepSec){
+int drawDotMTX(vector<unsigned char>& input, unsigned int sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
         cout << "can't find Dev dirver" << endl;
@@ -123,7 +122,7 @@ int drawDotMTX(vector<unsigned char>& input, uint32_t sleepSec){
     return 0;
 }
 
-int drawDotMTX2(vector<unsigned char>& input, uint32_t sleepSec){
+int drawDotMTX2(vector<unsigned char>& input, unsigned int sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
         cout << "can't find Dev dirver" << endl;
@@ -136,7 +135,7 @@ int drawDotMTX2(vector<unsigned char>& input, uint32_t sleepSec){
     return 0;
 }
 
-int drawDotMTX3(vector<unsigned char>& input, uint32_t sleepSec){
+int drawDotMTX3(vector<unsigned char>& input, unsigned int sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
         cout << "can't find Dev dirver" << endl;
