@@ -48,29 +48,20 @@ int main() {
     printClcd("Start Program");
     
     int startTime, currentTime;
-    startTime = clock();
-    currentTime = clock();
     cout << "dot1 run" << endl;
-    while( currentTime - startTime < 3000000 ){ //5000ms
-        drawDotMTX(*figure, 450000);
-        currentTime = clock();
-    }
+    drawDotMTX(*figure, 450000);
+
+    cout << "sleep(1)" << endl;
+    sleep(1);
     
     cout << "dot2 run" << endl;
-    startTime = clock();
-    currentTime = clock();
-    while( currentTime - startTime < 3000000 ){ //5000ms
-        drawDotMTX2(figure2, 450000);
-        currentTime = clock();
-    }
+    drawDotMTX2(figure2, 450000);
 
+    cout << "sleep(1)" << endl;
+    sleep(1);
+    
     cout << "dot3 run" << endl;
-    startTime = clock();
-    currentTime = clock();
-    while( currentTime - startTime < 3000000 ){ //5000ms
-        drawDotMTX3(*figure3, 450000);
-        currentTime = clock();
-    }
+    drawDotMTX3(*figure3, 450000);
 
     printClcd("Press any key to terminate Program");
     while (true){
@@ -119,7 +110,7 @@ int drawDotMTX(unsigned char& input, unsigned int sleepSec){
         cout << "can't find Dev dirver" << endl;
         return -1; 
     }
-    write(dotMtx, &input, sizeof(input));
+    write(dotMtx, &input, 8);
     usleep(sleepSec);
     close(dotMtx);
     return 0;
@@ -131,7 +122,7 @@ int drawDotMTX2(unsigned char input[], unsigned int sleepSec){
         cout << "can't find Dev dirver" << endl;
         return -1; 
     }
-    write(dotMtx, &input, sizeof(input));
+    write(dotMtx, &input, 8);
     usleep(sleepSec);
     close(dotMtx);
     return 0;
@@ -144,7 +135,7 @@ int drawDotMTX3(unsigned char input, unsigned int sleepSec){
         return -1; 
     }
 
-    write(dotMtx, &input, sizeof(input));
+    write(dotMtx, &input, 8);
     usleep(sleepSec);
     close(dotMtx);
     return 0;
