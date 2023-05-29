@@ -18,7 +18,7 @@
 using namespace std;
 
 int printClcd(string str);
-int getTactSw(unsigned char& input);
+int getTactSw(int& input);
 int drawDotMTX(unsigned char& input, unsigned int sleepSec);
 int drawDotMTX2(unsigned char input[], unsigned int sleepSec);
 int drawDotMTX3(unsigned char input, unsigned int sleepSec);
@@ -36,7 +36,7 @@ unsigned char figure3[] = {0x7E, 0x60, 0x60, 0x7C, 0x60, 0xff, 0xff, 0xff};
 int main() {
     printClcd("Press any key to start Game");
     while (true){
-        unsigned char tactSwInput = 0;
+        int tactSwInput = 0;
         getTactSw(tactSwInput);
         if (tactSwInput == 0) continue;
         else{
@@ -48,24 +48,22 @@ int main() {
     printClcd("Start Program");
     
     int startTime, currentTime;
-    cout << "dot1 run" << endl;
-    drawDotMTX(*figure, 450000);
 
-    cout << "sleep(1)" << endl;
-    sleep(1);
-    
     cout << "dot2 run" << endl;
-    drawDotMTX2(figure2, 450000);
+    drawDotMTX(*figure, 3000000);
 
+
+    drawDotMTX(*figure3, 3000000);
+    drawDotMTX(*figure2, 3000000);
     cout << "sleep(1)" << endl;
     sleep(1);
+    drawDotMTX2(figure, 3000000);
     
-    cout << "dot3 run" << endl;
-    drawDotMTX3(*figure3, 450000);
+
 
     printClcd("Press any key to terminate Program");
     while (true){
-        unsigned char tactSwInput = 0;
+        int tactSwInput = 0;
         getTactSw(tactSwInput);
         if (tactSwInput == 0) continue;
         else{
@@ -93,7 +91,7 @@ int printClcd(string str){
     return 0;
 }
 
-int getTactSw(unsigned char& input){
+int getTactSw(int& input){
     tactSw = open(tact, O_RDWR);
     if (tactSw < 0) {
         cout << "can't find Dev driver" << endl;
