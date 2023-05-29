@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <string.h>
 
 #include<unistd.h> 			// POSIX 운영체제 API에 대한 액세스 제공
 #include<fcntl.h> 			// 타겟시스템 입출력 장치 관련
@@ -17,11 +17,10 @@
 
 using namespace std;
 
+int clearClcd();
 int printClcd(string str);
 int getTactSw(int& input);
 int drawDotMTX(unsigned char& input, unsigned int sleepSec);
-int drawDotMTX2(unsigned char input[], unsigned int sleepSec);
-int drawDotMTX3(unsigned char input, unsigned int sleepSec);
 
 int clcds;
 int dipSw;
@@ -34,6 +33,7 @@ unsigned char figure2[] = {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0xff, 0xff};
 unsigned char figure3[] = {0x7E, 0x60, 0x60, 0x7C, 0x60, 0xff, 0xff, 0xff};
 
 int main() {
+    
     printClcd("Press any key to start Game");
     while (true){
         int tactSwInput = 0;
@@ -44,20 +44,19 @@ int main() {
             break;
         }
     }
-
+    clearClcd();
     printClcd("Start Program");
     
     int startTime, currentTime;
 
     cout << "dot2 run" << endl;
-    drawDotMTX(*figure, 3000000);
+    drawDotMTX(*figure, 500000);
 
 
-    drawDotMTX(*figure3, 3000000);
-    drawDotMTX(*figure2, 3000000);
+    drawDotMTX(*figure3, 500000);
+    drawDotMTX(*figure2, 500000);
     cout << "sleep(1)" << endl;
-    sleep(1);
-    drawDotMTX2(figure, 3000000);
+
     
 
 
@@ -71,7 +70,23 @@ int main() {
             break;
         }
     }
+    clearClcd();
 
+    return 0;
+}
+
+int clearClcd(){
+    clcds = open(clcd, O_RDWR);
+    unsigned char clear[32];
+    memset(clear, 0, 32);
+    if (clcds < 0){
+        cout << "can't find Dev dirver" << endl;
+        return -1; 
+    }
+
+    write(clcds, &clear, sizeof(clear));
+    close(clcds);
+    cout << clcds << endl;
     return 0;
 }
 
@@ -83,11 +98,12 @@ int printClcd(string str){
         return -1; 
     }
 
-    if (write(clcds, str.c_str(), str.size()) == -1){
+    if (write(clcds, str.c_str(), 32) == -1){
         cout << "file write error" << endl; // str.size()이 걸로 되는지 모르겠음
         return -1;
     } 
     close(clcds);
+    cout << clcds << endl;
     return 0;
 }
 
@@ -109,31 +125,8 @@ int drawDotMTX(unsigned char& input, unsigned int sleepSec){
         return -1; 
     }
     write(dotMtx, &input, 8);
-    usleep(sleepSec);
-    close(dotMtx);
-    return 0;
-}
-
-int drawDotMTX2(unsigned char input[], unsigned int sleepSec){
-    dotMtx = open(dot, O_RDWR);
-    if (dotMtx < 0) {
-        cout << "can't find Dev dirver" << endl;
-        return -1; 
-    }
-    write(dotMtx, &input, 8);
-    usleep(sleepSec);
-    close(dotMtx);
-    return 0;
-}
-
-int drawDotMTX3(unsigned char input, unsigned int sleepSec){
-    dotMtx = open(dot, O_RDWR);
-    if (dotMtx < 0) {
-        cout << "can't find Dev dirver" << endl;
-        return -1; 
-    }
-
-    write(dotMtx, &input, 8);
+    cout << &input << endl;
+    cout << input << endl;
     usleep(sleepSec);
     close(dotMtx);
     return 0;
