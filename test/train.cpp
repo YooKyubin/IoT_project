@@ -21,7 +21,7 @@
 
 using namespace std;
 
-vector<unsigned char> fnd_number {~0x3f, ~0x06, ~0x5b, ~0x4f, ~0x66, ~0x6d, ~0x7d, ~0x07, ~0x7f, ~0x67, ~0x00};
+unsigned char fnd_number[] = {~0x3f, ~0x06, ~0x5b, ~0x4f, ~0x66, ~0x6d, ~0x7d, ~0x07, ~0x7f, ~0x67, ~0x00};
 
 
 void train(int& successRate, vector<int>& trainings, string& trainClcd);
@@ -95,10 +95,10 @@ int printClcd(string str){
 int printFnd(int input, unsigned int sleepSec){
 
     vector<unsigned char> data(4, fnd_number[0]);
-    data[0] = input / 1000  % 10;
-    data[1] = input / 100   % 10;
-    data[2] = input / 10    % 10;
-    data[3] = input / 1     % 10;
+    data[0] = fnd_number[ input / 1000  % 10 ];
+    data[1] = fnd_number[ input / 100   % 10 ];
+    data[2] = fnd_number[ input / 10    % 10 ];
+    data[3] = fnd_number[ input / 1     % 10 ];
 
     fnds=open(fnd, O_RDWR);
     if (fnds < 0) {

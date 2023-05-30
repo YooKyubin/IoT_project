@@ -13,10 +13,12 @@
 #include <stdlib.h>
 
 using namespace std;
+int printFnd(int input, unsigned int sleepSec);
 
 // 1        2       3       4       5       6       7       8       9       0       .
 // 0xF9,    0xA4,   0xB0,   0x99,   ~0x6D,  ~0x7D,  ~0x07,  ~0x7F,  0x10,   0xC0,   0x80
-vector<unsigned char> fnd_number {~0x3f, ~0x06, ~0x5b, ~0x4f, ~0x66, ~0x6d, ~0x7d, ~0x07, ~0x7f, ~0x67, ~0x00};
+unsigned char fnd_number[10] = {(unsigned char)~0x3f, (unsigned char)~0x06, (unsigned char)~0x5b, (unsigned char)~0x4f, (unsigned char)~0x66, 
+(unsigned char)~0x6d, (unsigned char)~0x7d, (unsigned char)~0x07, (unsigned char)~0x7f, (unsigned char)~0x67};
                                 // {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xD8, 0x80, 0x98};
 
 #define fnd "/dev/fnd" 		// 7-Segment FND 
@@ -35,10 +37,10 @@ int main() {
 
 int printFnd(int input, unsigned int sleepSec){
     vector<unsigned char> data(4, fnd_number[0]);
-    data[0] = input / 1000  % 10;
-    data[1] = input / 100   % 10;
-    data[2] = input / 10    % 10;
-    data[3] = input / 1     % 10;
+    data[0] = fnd_number[ input / 1000  % 10 ];
+    data[1] = fnd_number[ input / 100   % 10 ];
+    data[2] = fnd_number[ input / 10    % 10 ];
+    data[3] = fnd_number[ input / 1     % 10 ];
     fnds=open(fnd, O_RDWR);
     if (fnds < 0) {
         cout << "can't find Dev dirver" << endl;
