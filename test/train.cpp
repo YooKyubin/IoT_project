@@ -24,11 +24,12 @@ using namespace std;
 vector<unsigned char> fnd_number {~0x3f, ~0x06, ~0x5b, ~0x4f, ~0x66, ~0x6d, ~0x7d, ~0x07, ~0x7f, ~0x67, ~0x00};
 
 
-void train(int& successRate, vector<int>& trainings);
+void train(int& successRate, vector<int>& trainings, string& trainClcd);
 int printFnd(int input, unsigned int sleepSec);
 int getTactSw(int& input);
 int drawDotMTX(unsigned char& input, unsigned int sleepSec);
 int drawDotMTX(vector<unsigned char>& input, unsigned int sleepSec);
+int printClcd(string str);
 
 int fnds;
 int clcds;
@@ -41,23 +42,54 @@ vector<unsigned char> face {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42};
 int main() {
     vector<int> trainings;
     int successRate = 100;
+    string trainClcd = "Today's training : ";
+
     for(int i=0; i < 8; i++) {
-        train(successRate, trainings);
+        train(successRate, trainings, trainClcd);
     }
     return 0;
 }
 
-void train(int& successRate, vector<int>& trainings){
+// 현재 예약된 훈련 목록을 clcd로 보여줌, dotmtx로 현재 얼굴 보여줌, FND로 현재 성공확률 보여줌
+void train(int& successRate, vector<int>& trainings, string& trainClcd){
     // if ( 돌봐주기 성공 ) { successRate += 10; }
     int training = 0;
+    printClcd(trainClcd);
+    
     while (training == 0){
         getTactSw(training);
-        drawDotMTX(face, 300000);
-        printFnd(successRate, 300000);
+        drawDotMTX(face, 250000); // 0.25s
+        printFnd(successRate, 250000); // 0.25s
     }
-    trainings.push_back(training);
-    
+
+    if ( training > 4 ){
+        //잘못된 입력
+    }
+    else{
+        trainings.push_back(training);
+        trainClcd.push_back((char)training);
+        successRate -= 10;
+        if (training == 4){
+            successRate += 3; // 사냥은 7 감소
+        }
+    } 
     return;
+}
+
+int printClcd(string str){
+    clcds = open(clcd, O_RDWR);
+
+    if (clcds < 0){
+        cout << "can't find Dev dirver" << endl;
+        return -1; 
+    }
+
+    if (write(clcds, str.c_str(), 32) == -1){
+        cout << "file write error" << endl;
+        return -1;
+    } 
+    close(clcds);
+    return 0;
 }
 
 int printFnd(int input, unsigned int sleepSec){
