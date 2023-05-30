@@ -7,9 +7,9 @@
 #include <unistd.h>
 #include <vector>
 #include <string>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #define tact "/dev/tactsw" 	// Tact Switch
 #define clcd "/dev/clcd" 	// Character LCD
