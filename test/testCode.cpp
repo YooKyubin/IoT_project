@@ -101,9 +101,10 @@ int main() {
 
         while (dipSwInput < 255){
             unsigned char pre_dipSwInput = dipSwInput;
+            // 1st operate funciotn();
 
             while (pre_dipSwInput == dipSwInput){
-                // 1st operate funciotn();
+                // 1.5 
                 getDipSw(dipSwInput);
             }
 
