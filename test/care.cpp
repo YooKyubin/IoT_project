@@ -9,7 +9,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+// test
 #define tact "/dev/tactsw" 	// Tact Switch
 #define clcd "/dev/clcd" 	// Character LCD
 
