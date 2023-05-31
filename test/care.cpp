@@ -3,13 +3,13 @@
 #include <sys/types.h>		// 시스템에서 사용하는 자료형 정보
 #include <sys/stat.h> 		// 파일의 상태에 대한 정보
 #include <time.h> 			// 시간 관련
-#include <unistd.h>
+#include <unistd.h>         ///
 #include <vector>
 #include <string>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-// test
+
 #define tact "/dev/tactsw" 	// Tact Switch
 #define clcd "/dev/clcd" 	// Character LCD
 
