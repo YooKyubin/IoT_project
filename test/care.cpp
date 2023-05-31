@@ -15,17 +15,23 @@
 
 using namespace std;
 
+bool game_care();
+int printClcd(string str);
+int getTactSw(int& input);
+
+
 int clcds;
 int tactSw;
+string train_str = "1.Run 2.Fly 3.Swim 4.Hunt*";
 
 int main() {
 
 	game_care();
-	printClcd("1.Run 2.Fly 3.Swim 4.Hunt*");
+	printClcd(train_str);
 
 }
 
-int game_care() {
+bool game_care() {
 
 	string care_arr[4] = { "1.Feed", "2.Wash", "3.Play", "4.Sleep" };
 	int random_index = rand() % care_arr->size();
@@ -33,21 +39,22 @@ int game_care() {
 	
 	printClcd(care_str);
 
-	int tactInput; //tactswinput
+	int tactInput = 0; //tactswinput
 
-	while (1) {
+	while (tactInput == 0) {
 		getTactSw(tactInput);
-		if (tactInput) break;
+		//cout << tactInput << endl;		
+		// if (tactInput != 0) break;
 	}
 
-		if (random_index == tactInput) {
-			cout << "care success" << endl;
-			return true;
-		}
-		else {
-			cout << "failure to care" << endl;
-			return false;
-		}
+	if (random_index + 1 == tactInput) {
+		cout << "care success" << endl;
+		return true;
+	}
+	else {
+		cout << "failure to care" << endl;
+		return false;
+	}
 
 }
 
@@ -59,7 +66,7 @@ int printClcd(string str) {
 		return -1;
 	}
 
-	if (write(clcds, str.c_str(), str.size()) == -1) {
+	if (write(clcds, str.c_str(), 32) == -1) {
 		cout << "file write error" << endl; // str.size()이 걸로 되는지 모르겠음
 		return -1;
 	}
