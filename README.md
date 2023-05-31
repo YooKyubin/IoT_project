@@ -1,2 +1,2 @@
-# number_memory1
+# Digivice
 hknu iot project team1
