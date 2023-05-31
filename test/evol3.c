@@ -100,6 +100,7 @@ int check_gameover_2(unsigned int score_run,unsigned int score_fly,unsigned int 
     if( (score_run < threshold_score_run) ||(score_fly<threshold_score_fly) || (score_swim < threshold_score_swim) )
     {
         //game_over
+        dot_mtx = open(dot, O_RDWR);
 
         // 게임 오버 표시 도트 매트릭스 표현  X 표시 점멸 2번 후 초기화
         print_dot_mtx_gameover();
@@ -118,8 +119,8 @@ int check_gameover_2(unsigned int score_run,unsigned int score_fly,unsigned int 
         if(score_run == score_fly || score_fly == score_swim || score_swim == score_run)
         {
             //동점인 경우 순위가 정해지지 않기 때문에 게임 오버
-
-            // 게임 오버 표시 도트 매트릭스 표현  X 표시 점멸 2번 후 초기화
+            dot_mtx = open(dot, O_RDWR);    
+	// 게임 오버 표시 도트 매트릭스 표현  X 표시 점멸 2번 후 초기화
             print_dot_mtx_gameover();
 
             return 0;
@@ -129,7 +130,7 @@ int check_gameover_2(unsigned int score_run,unsigned int score_fly,unsigned int 
         {   // score_run 이 1순위 일 때
             if(score_fly > score_swim)
             {   //score_fly 가 2 순위 일 때     >>      사슴
-
+                dot_mtx = open(dot, O_RDWR);
                 write(dot_mtx, &c[1], sizeof(c[1])); 
                 usleep(500000); 
                 close(dot_mtx);
@@ -139,7 +140,7 @@ int check_gameover_2(unsigned int score_run,unsigned int score_fly,unsigned int 
             }
             else if(score_fly < score_swim)
             {   //score_swim 이 2순위 일 때     >>      거북이
-
+                dot_mtx = open(dot, O_RDWR);
                 write(dot_mtx, &c[2], sizeof(c[2])); 
                 usleep(500000); 
                 close(dot_mtx);
@@ -153,7 +154,7 @@ int check_gameover_2(unsigned int score_run,unsigned int score_fly,unsigned int 
            // score_fly 가 1순위 일 때
             if(score_run > score_swim)
             {   //score_run 가 2 순위 일 때     >>      독수리
-
+                dot_mtx = open(dot, O_RDWR);
                 write(dot_mtx, &c[3], sizeof(c[3])); 
                 usleep(500000); 
                 close(dot_mtx);
@@ -163,11 +164,10 @@ int check_gameover_2(unsigned int score_run,unsigned int score_fly,unsigned int 
             }
             else if(score_run < score_swim)
             {   //score_swim 이 2순위 일 때     >>      잠자리
-
+                dot_mtx = open(dot, O_RDWR);
                 write(dot_mtx, &c[4], sizeof(c[4])); 
                 usleep(500000); 
                 close(dot_mtx);
-                sleep(2);
                 return 4;
             }
         }
@@ -176,7 +176,7 @@ int check_gameover_2(unsigned int score_run,unsigned int score_fly,unsigned int 
            // score_swim 가 1순위 일 때
             if(score_run > score_fly)
             {   //score_run 가 2 순위 일 때     >>      돌고래
-
+                dot_mtx = open(dot, O_RDWR);
                 write(dot_mtx, &c[5], sizeof(c[5])); 
                 usleep(500000); 
                 close(dot_mtx);
@@ -186,7 +186,7 @@ int check_gameover_2(unsigned int score_run,unsigned int score_fly,unsigned int 
             }
             else if(score_run < score_fly)
             {   //score_fly 이 2순위 일 때      >>      해파리
-
+                dot_mtx = open(dot, O_RDWR);
                 write(dot_mtx, &c[6], sizeof(c[6])); 
                 usleep(500000); 
                 close(dot_mtx);
