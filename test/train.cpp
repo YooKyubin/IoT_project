@@ -24,7 +24,7 @@ using namespace std;
 unsigned char fnd_number[] = {~0x3f, ~0x06, ~0x5b, ~0x4f, ~0x66, ~0x6d, ~0x7d, ~0x07, ~0x7f, ~0x67, ~0x00};
 
 
-void train(int& successRate, vector<int>& trainings, string& trainClcd);
+void train(int& successRate, vector<int>& trainings);
 int printFnd(int input, unsigned int sleepSec);
 int getTactSw(int& input);
 int drawDotMTX(unsigned char& input, unsigned int sleepSec);
@@ -42,23 +42,23 @@ vector<unsigned char> face {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42};
 int main() {
     vector<int> trainings;
     int successRate = 100;
-    string trainClcd = "Today's training : ";
 
-    for(int i=0; i < 8; i++) {
-        train(successRate, trainings, trainClcd);
+    for(int i=0; i < 4; i++) {
+        train(successRate, trainings);
     }
     return 0;
 }
 
 // 현재 예약된 훈련 목록을 clcd로 보여줌, dotmtx로 현재 얼굴 보여줌, FND로 현재 성공확률 보여줌
-void train(int& successRate, vector<int>& trainings, string& trainClcd){
+void train(int& successRate, vector<int>& trainings){
     // if ( 돌봐주기 성공 ) { successRate += 10; }
     int training = 0;
+    string trainClcd = "Today's traingin : ";
     printClcd(trainClcd);
     
+    drawDotMTX(face, 250000); // 0.25s
     while (training == 0){
         getTactSw(training);
-        drawDotMTX(face, 250000); // 0.25s
         printFnd(successRate, 250000); // 0.25s
     }
 
@@ -67,7 +67,7 @@ void train(int& successRate, vector<int>& trainings, string& trainClcd){
     }
     else{
         trainings.push_back(training);
-        trainClcd.push_back((char)training);
+        trainClcd += to_string(training);
         successRate -= 10;
         if (training == 4){
             successRate += 3; // 사냥은 7 감소
