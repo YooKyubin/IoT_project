@@ -191,15 +191,16 @@ void print_dot_mtx_gameover() // 게임 오버 표시 도트 매트릭스 표현
     usleep(500000); 
     write(dotMtx, &c[9], sizeof(c[8])); 
     usleep(500000);
+    close(dotMtx);
     return;
 }
 
 bool game_care() {
 
-	string care_arr[4] = {"My pet looks    hungry", 
-                            "My pet looks    dirty", 
-                            "My pet looks    bored", 
-                            "My pet looks    sleepy"};// { "1.Feed", "2.Wash", "3.Play", "4.Sleep" };
+	string care_arr[4] = {"My pet looks        hungry", 
+                            "My pet looks        dirty", 
+                            "My pet looks        bored", 
+                            "My pet looks        sleepy"};// { "1.Feed", "2.Wash", "3.Play", "4.Sleep" };
 	int random_index = rand() % 4;
 	string care_str = care_arr[random_index];
 	
@@ -231,10 +232,11 @@ void train(int& successRate, vector<int>& trainings){
     string trainClcd = "Today's traingin : ";
     printClcd(trainClcd);
     
-    drawDotMTX(creature.face, 1000000); // 1s
+    printFnd(successRate, 1000000); // 0.25s
     while (training == 0){
         getTactSw(training);
-        printFnd(successRate, 250000); // 0.25s
+        usleep(1000);
+        drawDotMTX(creature.face, 250000); // 1s
     }
 
     if ( training > 4 ){
@@ -242,7 +244,8 @@ void train(int& successRate, vector<int>& trainings){
     }
     else{
         trainings.push_back(training);
-        trainClcd += to_string(training);
+        // trainClcd += to_string(training);
+        trainClcd = trainClcd.append(to_string(training));
         successRate -= 10;
         if (training == 4){
             successRate += 3; // 사냥은 7 감소
@@ -292,11 +295,11 @@ void trainingResult(int successRate, vector<int> trainings){
 
     printClcd("Training Success!");
     drawDotMTX(*smile, 700000);
-    printClcd("   running :    " + to_string(creature.state[1]) + " ( + " + to_string(table[1]) + ")" ); // running : 32(+3)
+    printClcd("   running :        " + to_string(creature.state[1]) + " ( + " + to_string(table[1]) + ")" ); // running : 32(+3)
     drawDotMTX(*smile, 700000);
-    printClcd("   flying :    " + to_string(creature.state[2]) + " ( + " + to_string(table[2]) + ")" ); 
+    printClcd("   flying :         " + to_string(creature.state[2]) + " ( + " + to_string(table[2]) + ")" ); 
     drawDotMTX(*smile, 700000);
-    printClcd("   running :    " + to_string(creature.state[3]) + " ( + " + to_string(table[3]) + ")" ); 
+    printClcd("   running :        " + to_string(creature.state[3]) + " ( + " + to_string(table[3]) + ")" ); 
     drawDotMTX(*smile, 700000);
     clearClcd();
     // cout << "running : " << table[1] << endl;
