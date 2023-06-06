@@ -23,8 +23,10 @@ using namespace std;
 
 bool game_care();
 void trainingResult(int successRate, vector<int> trainings);
-void train(int& successRate, vector<int>& trainings, string& trainClcd);
+bool train(int& successRate, vector<int>& trainings, string& trainClcd, unsigned char pre_dipSwInput, unsigned char& dipSwInput);
 bool check_gameover_1();
+int determineNext();
+void evolAnimation(vector<unsigned char> cur, vector<unsigned char> next);
 
 void print_dot_mtx_gameover();
 int printFnd(int input, unsigned int sleepSec);
@@ -56,6 +58,10 @@ unsigned char c[9][8] = {
     {0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81},   //게임오버 표시 X
     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}    //초기화
 };
+vector<vector<unsigned char>> faces {
+    {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0x00}, // egg
+    {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42}  // 유년기
+};
 
 struct Creature{
     int status;
@@ -67,17 +73,18 @@ struct Creature{
     void init(int current){
         status = current;
         state.assign(4,0);
+        face = faces[status];
 
-        if (status == 0){
-            name = "egg";
-            // memcpy(&face, &egg, 8);
-            face = {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0x00};
-        }
-        else{
-            name = "immature";
-            // memcpy(&face, &immature, 8);
-            face = {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42};
-        }
+        // if (status == 0){
+        //     name = "egg";
+        //     // memcpy(&face, &egg, 8);
+        //     face = faces[0s
+        // }
+        // else{
+        //     name = "immature";
+        //     // memcpy(&face, &immature, 8);
+        //     face = {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42};
+        // }
     }
 };
 
@@ -97,7 +104,7 @@ int main() {
     }
     clearClcd();
 
-    // Game start
+    // GAME START
     bool gameOver = false;
     for (int status=0; status < 2; status++){
         creature.init(status);
@@ -107,8 +114,9 @@ int main() {
         unsigned char dipSwInput;
         getDipSw(dipSwInput);
         if (dipSwInput != 0){
-            printClcd("Please init  dip switch ");
+            printClcd("    Please init     dip switch  ");
             while(dipSwInput != 0){
+                drawDotMTX(creature.face, 250000); // dot 매트릭스에 계속 띄워두기 위함
                 getDipSw(dipSwInput);
             }
             clearClcd();
@@ -116,29 +124,40 @@ int main() {
 
         while (dipSwInput < 255){ // repeat 8
             unsigned char pre_dipSwInput = dipSwInput;
-            int successRate = 100;
-            vector<int> trainings;
-            string trainClcd = "Today's traingin : ";
+            int successRate = 90; // 성공확률이 110이면 이상하다는 의견을 반영하여 90 시작
             if (game_care()) successRate += 10;
 
-            while (pre_dipSwInput == dipSwInput){
-                train(successRate, trainings, trainClcd);
-                getDipSw(dipSwInput);
+            vector<int> trainings;
+            string trainClcd = "Today's traingin : ";
+            while (train(successRate, trainings, trainClcd, pre_dipSwInput, dipSwInput)) {
+                // dipSw가 변경될 때 가지 반복(대기)
             }
 
             trainingResult(successRate, trainings); // 2nd operate function();
         }
 
-        // if creature.state > threshold 
-        // and next status
+
         gameOver = check_gameover_1();
         if (gameOver) break;
+        else if(creature.status == 1){
+            evolAnimation(faces[0], faces[1]);
+        }
     }
 
     if (!gameOver){
         // 3rd operate function();
+        int next = determineNext();
+        if (next != 0){
+            // 벡터와 배열 차이 때문에 그냥 하드코딩했음, 기회되면 변경 예정
+            vector<unsigned char> temp;
+            for (int i=0; i<8; i++) temp[i] = c[next][i];
+            evolAnimation(creature.face, temp);
+            drawDotMTX(*c[next], 2000000);
+        }
     }
+    
 
+    // GAME END
     printClcd("Press any key to terminate");
     while (true){
         int tactSwInput = 0;
@@ -179,18 +198,66 @@ bool check_gameover_1()
     }
 }
 
+int determineNext(){
+    int score_run = creature.state[1];
+    int score_fly = creature.state[2];
+    int score_swim = creature.state[3];
+    if(score_run == score_fly || score_fly == score_swim || score_swim == score_run)
+    { 
+        //동점인 경우 순위가 정해지지 않기 때문에 게임 오버
+        print_dot_mtx_gameover();
+        return 0;
+    }
+
+    if( score_run > score_fly && score_run > score_swim)
+    {   // score_run 이 1순위 일 때
+        if(score_fly > score_swim)
+        {   //score_fly 가 2 순위 일 때     >>      사슴
+            return 1;
+        }
+        else if(score_fly < score_swim)
+        {   //score_swim 이 2순위 일 때     >>      거북이
+            return 2;
+        }
+    }
+    else if( score_fly > score_run && score_fly > score_swim)
+    {
+        // score_fly 가 1순위 일 때
+        if(score_run > score_swim)
+        {   //score_run 가 2 순위 일 때     >>      독수리
+            return 3;
+        }
+        else if(score_run < score_swim)
+        {   //score_swim 이 2순위 일 때     >>      잠자리
+            return 4;
+        }
+    }
+    else if( score_swim > score_run && score_swim > score_fly)
+    {
+        // score_swim 가 1순위 일 때
+        if(score_run > score_fly)
+        {   //score_run 가 2 순위 일 때     >>      돌고래
+            return 5;
+        }
+        else if(score_run < score_fly)
+        {   //score_fly 이 2순위 일 때      >>      해파리
+            return 6;
+        }
+    }
+}
+
 void print_dot_mtx_gameover() // 게임 오버 표시 도트 매트릭스 표현  X 표시 점멸 2번 후 초기화
 {
     printClcd("   Game Over    ");
 
     dotMtx = open(dot, O_RDWR);
-    write(dotMtx, &c[8], sizeof(c[8])); 
+    write(dotMtx, &c[8], 8); 
     usleep(500000); 
-    write(dotMtx, &c[9], sizeof(c[8])); 
+    write(dotMtx, &c[9], 8); 
     usleep(500000); 
-    write(dotMtx, &c[8], sizeof(c[8])); 
+    write(dotMtx, &c[8], 8); 
     usleep(500000); 
-    write(dotMtx, &c[9], sizeof(c[8])); 
+    write(dotMtx, &c[9], 8); 
     usleep(500000);
     close(dotMtx);
     return;
@@ -198,60 +265,71 @@ void print_dot_mtx_gameover() // 게임 오버 표시 도트 매트릭스 표현
 
 bool game_care() {
 
-	string care_arr[4] = {"My pet looks        hungry", 
-                            "My pet looks        dirty", 
-                            "My pet looks        bored", 
-                            "My pet looks        sleepy"};// { "1.Feed", "2.Wash", "3.Play", "4.Sleep" };
+	string care_arr[4] = {"  My pet looks      hungry", 
+                            "  My pet looks      dirty", 
+                            "  My pet looks      bored", 
+                            "  My pet looks      sleepy"};// { "1.Feed", "2.Wash", "3.Play", "4.Sleep" };
 	int random_index = rand() % 4;
 	string care_str = care_arr[random_index];
 	
 	printClcd(care_str);
 
-	int tactInput = 0; //tactswinput
+	int tactInput = 0;
 
 	while (tactInput == 0) {
 		getTactSw(tactInput);
-		//cout << tactInput << endl;		
-		// if (tactInput != 0) break;
+		usleep(1000);
+        drawDotMTX(creature.face, 250000);
 	}
 
 	if (random_index + 1 == tactInput) {
-		cout << "care success" << endl;
+		printClcd("Success to care!");
+        drawDotMTX(*smile, 1500000);
 		return true;
 	}
 	else {
-		cout << "failure to care" << endl;
+		printClcd(" Failed to care ");
+        drawDotMTX(*TT, 1500000);
 		return false;
 	}
 
 }
 
 // 현재 예약된 훈련 목록을 clcd로 보여줌, dotmtx로 현재 얼굴 보여줌, FND로 현재 성공확률 보여줌
-void train(int& successRate, vector<int>& trainings, string& trainClcd){
+bool train(int& successRate, vector<int>& trainings, 
+    string& trainClcd, unsigned char pre_dipSwInput, unsigned char& dipSwInput){
+
     // if ( 돌봐주기 성공 ) { successRate += 10; }
     int training = 0;
     printClcd(trainClcd);
     
-    printFnd(successRate, 1000000); // 0.25s
+    printFnd(successRate, 1000000);
     while (training == 0){
         getTactSw(training);
         usleep(1000);
-        drawDotMTX(creature.face, 250000); // 1s
+        drawDotMTX(creature.face, 250000);
+
+        getDipSw(dipSwInput);
+        if (pre_dipSwInput != dipSwInput){
+            return false;
+        }
     }
 
     if ( training > 4 ){
         //잘못된 입력
+        printClcd("  Wroing Input! ");
+        usleep(500000);
     }
     else{
         trainings.push_back(training);
         // trainClcd += to_string(training);
-        trainClcd += to_string(training);
+        trainClcd += to_string(training) + " ";
         successRate -= 10;
         if (training == 4){
             successRate += 3; // 사냥은 7 감소
         }
     } 
-    return;
+    return true;
 }
 
 void trainingResult(int successRate, vector<int> trainings){
@@ -295,17 +373,29 @@ void trainingResult(int successRate, vector<int> trainings){
 
     printClcd("Training Success!");
     drawDotMTX(*smile, 700000);
-    printClcd("   running :        " + to_string(creature.state[1]) + " ( + " + to_string(table[1]) + ")" ); // running : 32(+3)
+    printClcd("   running :        " + to_string(creature.state[1]) + " (+" + to_string(table[1]) + ")" ); // running : 32 ( +3 )
     drawDotMTX(*smile, 700000);
-    printClcd("   flying :         " + to_string(creature.state[2]) + " ( + " + to_string(table[2]) + ")" ); 
+    printClcd("   flying :         " + to_string(creature.state[2]) + " (+" + to_string(table[2]) + ")" ); 
     drawDotMTX(*smile, 700000);
-    printClcd("   running :        " + to_string(creature.state[3]) + " ( + " + to_string(table[3]) + ")" ); 
+    printClcd("   swimming :       " + to_string(creature.state[3]) + " (+" + to_string(table[3]) + ")" ); 
     drawDotMTX(*smile, 700000);
     clearClcd();
     // cout << "running : " << table[1] << endl;
     // cout << "flying : " << table[2] << endl;
     // cout << "swimming : " << table[3] << endl;
     return;
+}
+
+void evolAnimation(vector<unsigned char> cur, vector<unsigned char> next){
+    vector<unsigned char> pic = cur;
+    for (int i=7; i >= 0; i--){
+        pic[i] = (unsigned char)255;
+        drawDotMTX(pic, 250000);
+    }
+    for (int i=0; i < 8; i++){
+        pic[i] = next[i];
+        drawDotMTX(pic, 250000);
+    }
 }
 
 /* IO functions */
