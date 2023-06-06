@@ -23,7 +23,7 @@ using namespace std;
 
 bool game_care();
 void trainingResult(int successRate, vector<int> trainings);
-void train(int& successRate, vector<int>& trainings);
+void train(int& successRate, vector<int>& trainings, string& trainClcd);
 bool check_gameover_1();
 
 void print_dot_mtx_gameover();
@@ -118,10 +118,11 @@ int main() {
             unsigned char pre_dipSwInput = dipSwInput;
             int successRate = 100;
             vector<int> trainings;
+            string trainClcd = "Today's traingin : ";
             if (game_care()) successRate += 10;
 
             while (pre_dipSwInput == dipSwInput){
-                train(successRate, trainings);
+                train(successRate, trainings, trainClcd);
                 getDipSw(dipSwInput);
             }
 
@@ -226,10 +227,9 @@ bool game_care() {
 }
 
 // 현재 예약된 훈련 목록을 clcd로 보여줌, dotmtx로 현재 얼굴 보여줌, FND로 현재 성공확률 보여줌
-void train(int& successRate, vector<int>& trainings){
+void train(int& successRate, vector<int>& trainings, string& trainClcd){
     // if ( 돌봐주기 성공 ) { successRate += 10; }
     int training = 0;
-    string trainClcd = "Today's traingin : ";
     printClcd(trainClcd);
     
     printFnd(successRate, 1000000); // 0.25s
@@ -245,7 +245,7 @@ void train(int& successRate, vector<int>& trainings){
     else{
         trainings.push_back(training);
         // trainClcd += to_string(training);
-        trainClcd = trainClcd.append(to_string(training));
+        trainClcd += to_string(training);
         successRate -= 10;
         if (training == 4){
             successRate += 3; // 사냥은 7 감소
