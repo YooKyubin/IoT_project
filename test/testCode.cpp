@@ -128,7 +128,7 @@ int main() {
             if (game_care()) successRate += 10;
 
             vector<int> trainings;
-            string trainClcd = "Today's traingin : ";
+            string trainClcd = "Today's training : ";
             while (train(successRate, trainings, trainClcd, pre_dipSwInput, dipSwInput)) {
                 // dipSw가 변경될 때 가지 반복(대기)
             }
@@ -252,13 +252,13 @@ void print_dot_mtx_gameover() // 게임 오버 표시 도트 매트릭스 표현
     printClcd("   Game Over    ");
 
     dotMtx = open(dot, O_RDWR);
-    write(dotMtx, &c[8], 8); 
-    usleep(500000); 
-    write(dotMtx, &c[9], 8); 
+    write(dotMtx, &c[7], 8); 
     usleep(500000); 
     write(dotMtx, &c[8], 8); 
     usleep(500000); 
-    write(dotMtx, &c[9], 8); 
+    write(dotMtx, &c[7], 8); 
+    usleep(500000); 
+    write(dotMtx, &c[8], 8); 
     usleep(500000);
     close(dotMtx);
     return;
