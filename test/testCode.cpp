@@ -139,7 +139,7 @@ int main() {
 
         gameOver = check_gameover_1();
         if (gameOver) break;
-        else if(creature.status == 1){
+        else if(creature.status == 0){
             evolAnimation(faces[0], faces[1]);
         }
     }
@@ -147,9 +147,10 @@ int main() {
     if (!gameOver){
         // 3rd operate function();
         int next = determineNext();
+        cout << next << endl;
         if (next != 0){
             // 벡터와 배열 차이 때문에 그냥 하드코딩했음, 기회되면 변경 예정
-            vector<unsigned char> temp;
+            vector<unsigned char> temp(8);
             for (int i=0; i<8; i++) temp[i] = c[next][i];
             evolAnimation(creature.face, temp);
             drawDotMTX(*c[next], 2000000);
