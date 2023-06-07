@@ -30,7 +30,7 @@ int determineNext();
 void evolAnimation(vector<unsigned char> cur, vector<unsigned char> next);
 void IdleAnimation(
     vector<unsigned char> pic, vector<unsigned char> shiftedPic,
-    vector<unsigned char>& draw, bool& isShift, unsigned int& start);
+    vector<unsigned char>& draw, bool& toggle, unsigned int& start);
 
 void print_dot_mtx_gameover();
 int printFnd(int input, unsigned int sleepSec);
@@ -132,8 +132,26 @@ int main() {
         int next = determineNext();
         cout << next << endl;
         if (next != 0){
+            vector<string> animal {
+                "      deer      ", 
+                "     turtle     ", 
+                "     eagle      ", 
+                "    drgonfly    ",
+                "     dolphin    ", 
+                "    jellyfish   "};
             evolAnimation(creature.face, figure[next]);
-            drawDotMTX(figure[next], 2000000);
+            printClcd(" Your pet bcame " + animal[next-1]);
+            int tatcSwInput = 0;
+
+            bool toggle = true;
+            vector<unsigned char> draw = figure[next];
+            vector<unsigned char> shiftedPic(8);
+            for (int i=0; i<8; i++) shiftedPic[i] = figure[next] << 1;
+            unsigned int start = clock();
+            while (tatcSwInput == 0){
+                IdleAnimation(figure[next], shiftedPic, draw, toggle, start);
+                getTactSw(tatcSwInput);
+            }
         }
     }
     
@@ -159,21 +177,21 @@ int main() {
 /* Operate functions*/
 void IdleAnimation(
     vector<unsigned char> pic, vector<unsigned char> shiftedPic,
-    vector<unsigned char>& draw, bool& isShift, unsigned int& start){
+    vector<unsigned char>& draw, bool& toggle, unsigned int& start){
 
     unsigned int cur = clock();
-    if (isShift){
+    if (toggle){
         if (cur - start > 3000){
-            isShift = !isShift;
+            toggle = !toggle;
             start = cur;
-            draw = pic;
+            draw = shiftedPic;
         }
     }
     else {
         if (cur - start > 1000){
-            isShift = !isShift;
+            toggle = !toggle;
             start = cur;
-            face = shiftedPic;
+            draw = pic;
         }
     }
     drawDotMTX(draw, 250000);
