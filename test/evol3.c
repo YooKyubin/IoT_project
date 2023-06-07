@@ -80,7 +80,7 @@ int check_gameover_1(unsigned int score_run,unsigned int score_fly,unsigned int 
         dot_mtx = open(dot, O_RDWR);
         write(dot_mtx, &c[0], sizeof(c[0])); 
         usleep(500000); 
-        
+        close(dot_mtx);
 
         return 1;
     }
@@ -218,7 +218,7 @@ void main()
         count ++;
     }
 
-    dot_mtx = open(dot, O_RDWR);
+    //dot_mtx = open(dot, O_RDWR);
     write(dot_mtx, &c[9], sizeof(c[8])); 
     sleep(3);
     close(dot_mtx);
