@@ -46,12 +46,11 @@ int dipSw;
 int fnds;
 int tactSw;
 int dotMtx;
-// unsigned char egg[8] = {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0x00};
-// unsigned char immature[8] = {0x3C, 0x18, 0x18, 0x18, 0x18, 0x18, 0x3C, 0x00};
+
 unsigned char smile[8] = {0x00, 0x00, 0x42, 0xA5, 0x00, 0x00, 0x00, 0x00};
 unsigned char TT[8] = {0x00, 0x00, 0xE7, 0x42, 0x42, 0x42, 0x00, 0x00};
 unsigned char fnd_number[] = {~0x3f, ~0x06, ~0x5b, ~0x4f, ~0x66, ~0x6d, ~0x7d, ~0x07, ~0x7f, ~0x67, ~0x00};
-unsigned char c[9][8] = { 
+vector<vector<unsigned char>> figure { 
     {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42},   //유년기
     {0x00, 0x84, 0x58, 0x20, 0x6E, 0x1F, 0x29, 0x2A},   //사슴, run, fly
     {0x00, 0x00, 0x8E, 0x5F, 0x00, 0x29, 0x00, 0x00},   //거북이, run, swim
@@ -133,11 +132,8 @@ int main() {
         int next = determineNext();
         cout << next << endl;
         if (next != 0){
-            // 벡터와 배열 차이 때문에 그냥 하드코딩했음, 기회되면 변경 예정
-            vector<unsigned char> temp(8);
-            for (int i=0; i<8; i++) temp[i] = c[next][i];
-            evolAnimation(creature.face, temp);
-            drawDotMTX(*c[next], 2000000);
+            evolAnimation(creature.face, figure[next]);
+            drawDotMTX(figure[next], 2000000);
         }
     }
     
@@ -284,13 +280,13 @@ void print_dot_mtx_gameover() // 게임 오버 표시 도트 매트릭스 표현
     printClcd("   Game Over    ");
 
     dotMtx = open(dot, O_RDWR);
-    write(dotMtx, &c[7], 8); 
+    write(dotMtx, figure[7].data(), 8); 
     usleep(500000); 
-    write(dotMtx, &c[8], 8); 
+    write(dotMtx, figure[8].data(), 8); 
     usleep(500000); 
-    write(dotMtx, &c[7], 8); 
+    write(dotMtx, figure[7].data(), 8); 
     usleep(500000); 
-    write(dotMtx, &c[8], 8); 
+    write(dotMtx, figure[8].data(), 8); 
     usleep(500000);
     close(dotMtx);
     return;
