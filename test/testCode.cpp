@@ -139,7 +139,7 @@ int main() {
 
         gameOver = check_gameover_1();
         if (gameOver) break;
-        else if(creature.status == 1){
+        else if(creature.status == 0){
             evolAnimation(faces[0], faces[1]);
         }
     }
