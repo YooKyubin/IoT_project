@@ -21,12 +21,16 @@
 
 using namespace std;
 
+void gameDescription();
 bool game_care();
 void trainingResult(int successRate, vector<int> trainings);
 bool train(int& successRate, vector<int>& trainings, string& trainClcd, unsigned char pre_dipSwInput, unsigned char& dipSwInput);
 bool check_gameover_1();
 int determineNext();
 void evolAnimation(vector<unsigned char> cur, vector<unsigned char> next);
+void IdleAnimation(
+    vector<unsigned char> pic, vector<unsigned char> shiftedPic,
+    vector<unsigned char>& draw, bool& toggle, unsigned int& start);
 
 void print_dot_mtx_gameover();
 int printFnd(int input, unsigned int sleepSec);
@@ -42,12 +46,11 @@ int dipSw;
 int fnds;
 int tactSw;
 int dotMtx;
-// unsigned char egg[8] = {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0x00};
-// unsigned char immature[8] = {0x3C, 0x18, 0x18, 0x18, 0x18, 0x18, 0x3C, 0x00};
+
 unsigned char smile[8] = {0x00, 0x00, 0x42, 0xA5, 0x00, 0x00, 0x00, 0x00};
 unsigned char TT[8] = {0x00, 0x00, 0xE7, 0x42, 0x42, 0x42, 0x00, 0x00};
 unsigned char fnd_number[] = {~0x3f, ~0x06, ~0x5b, ~0x4f, ~0x66, ~0x6d, ~0x7d, ~0x07, ~0x7f, ~0x67, ~0x00};
-unsigned char c[9][8] = { 
+vector<vector<unsigned char>> figure { 
     {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42},   //유년기
     {0x00, 0x84, 0x58, 0x20, 0x6E, 0x1F, 0x29, 0x2A},   //사슴, run, fly
     {0x00, 0x00, 0x8E, 0x5F, 0x00, 0x29, 0x00, 0x00},   //거북이, run, swim
@@ -59,8 +62,8 @@ unsigned char c[9][8] = {
     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}    //초기화
 };
 vector<vector<unsigned char>> faces {
-    {0x7E, 0x60, 0x60, 0x7C, 0x60, 0x60, 0x7E, 0x00}, // egg
-    {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42}  // 유년기
+    {0x18, 0x34, 0x7a, 0xfa, 0xff, 0xff, 0x7e, 0x3c}, // egg2
+    {0x00, 0x66, 0x3c, 0x7e, 0x56, 0xba, 0x46, 0x7e}  // 유년기5
 };
 
 struct Creature{
@@ -74,17 +77,6 @@ struct Creature{
         status = current;
         state.assign(4,0);
         face = faces[status];
-
-        // if (status == 0){
-        //     name = "egg";
-        //     // memcpy(&face, &egg, 8);
-        //     face = faces[0s
-        // }
-        // else{
-        //     name = "immature";
-        //     // memcpy(&face, &immature, 8);
-        //     face = {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42};
-        // }
     }
 };
 
@@ -92,16 +84,7 @@ Creature creature;
 
 int main() {
     
-    printClcd("Press any key to start Game");
-    while (true){
-        int tactSwInput = 0;
-        getTactSw(tactSwInput);
-        if (tactSwInput == 0) continue;
-        else{
-            cout << "Current tact switch input : " << tactSwInput << endl;
-            break;
-        }
-    }
+    gameDescription();
     clearClcd();
 
     // GAME START
@@ -114,7 +97,7 @@ int main() {
         unsigned char dipSwInput;
         getDipSw(dipSwInput);
         if (dipSwInput != 0){
-            printClcd("    Please init     dip switch  ");
+            printClcd("  Please init      dip switch   ");
             while(dipSwInput != 0){
                 drawDotMTX(creature.face, 250000); // dot 매트릭스에 계속 띄워두기 위함
                 getDipSw(dipSwInput);
@@ -149,11 +132,26 @@ int main() {
         int next = determineNext();
         cout << next << endl;
         if (next != 0){
-            // 벡터와 배열 차이 때문에 그냥 하드코딩했음, 기회되면 변경 예정
-            vector<unsigned char> temp(8);
-            for (int i=0; i<8; i++) temp[i] = c[next][i];
-            evolAnimation(creature.face, temp);
-            drawDotMTX(*c[next], 2000000);
+            vector<string> animal {
+                "      deer      ", 
+                "     turtle     ", 
+                "     eagle      ", 
+                "    drgonfly    ",
+                "     dolphin    ", 
+                "    jellyfish   "};
+            evolAnimation(creature.face, figure[next]);
+            printClcd(" Your pet bcame " + animal[next-1]);
+            int tatcSwInput = 0;
+
+            bool toggle = true;
+            vector<unsigned char> draw = figure[next];
+            vector<unsigned char> shiftedPic(8);
+            for (int i=0; i<8; i++) shiftedPic[i] = figure[next][i] << 1;
+            unsigned int start = clock();
+            while (tatcSwInput == 0){
+                IdleAnimation(figure[next], shiftedPic, draw, toggle, start);
+                getTactSw(tatcSwInput);
+            }
         }
     }
     
@@ -177,7 +175,55 @@ int main() {
 
 
 /* Operate functions*/
-// int check_gameover_1(unsigned int score_run,unsigned int score_fly,unsigned int score_swim)
+void IdleAnimation(
+    vector<unsigned char> pic, vector<unsigned char> shiftedPic,
+    vector<unsigned char>& draw, bool& toggle, unsigned int& start){
+
+    unsigned int cur = clock();
+    if (toggle){
+        if (cur - start > 3000){
+            toggle = !toggle;
+            start = cur;
+            draw = shiftedPic;
+        }
+    }
+    else {
+        if (cur - start > 1000){
+            toggle = !toggle;
+            start = cur;
+            draw = pic;
+        }
+    }
+    drawDotMTX(draw, 250000);
+
+}
+
+void gameDescription(){
+    printClcd("    type of          cares      ");
+    int tactSwInput = 0;
+    while (tactSwInput == 0){
+        getTactSw(tactSwInput);
+    }
+
+    tactSwInput = 0;
+    printClcd("1. feed 2. wash 3. play 4. sleep");
+    while (tactSwInput == 0){
+        getTactSw(tactSwInput);
+    }
+
+    tactSwInput = 0;
+    printClcd("    type of        trainings    ");
+    while (tactSwInput == 0){
+        getTactSw(tactSwInput);
+    }
+
+    tactSwInput = 0;
+    printClcd("1. run   2. fly 3. swim  4. hunt");
+    while (tactSwInput == 0){
+        getTactSw(tactSwInput);
+    }
+}
+
 bool check_gameover_1()
 {
     int threshold_score_run = 3;  //달리기 점수 임계값
@@ -252,13 +298,13 @@ void print_dot_mtx_gameover() // 게임 오버 표시 도트 매트릭스 표현
     printClcd("   Game Over    ");
 
     dotMtx = open(dot, O_RDWR);
-    write(dotMtx, &c[7], 8); 
+    write(dotMtx, figure[7].data(), 8); 
     usleep(500000); 
-    write(dotMtx, &c[8], 8); 
+    write(dotMtx, figure[8].data(), 8); 
     usleep(500000); 
-    write(dotMtx, &c[7], 8); 
+    write(dotMtx, figure[7].data(), 8); 
     usleep(500000); 
-    write(dotMtx, &c[8], 8); 
+    write(dotMtx, figure[8].data(), 8); 
     usleep(500000);
     close(dotMtx);
     return;
