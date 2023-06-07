@@ -28,6 +28,9 @@ bool train(int& successRate, vector<int>& trainings, string& trainClcd, unsigned
 bool check_gameover_1();
 int determineNext();
 void evolAnimation(vector<unsigned char> cur, vector<unsigned char> next);
+void IdleAnimation(
+    vector<unsigned char> pic, vector<unsigned char> shiftedPic,
+    vector<unsigned char>& draw, bool& isShift, unsigned int& start);
 
 void print_dot_mtx_gameover();
 int printFnd(int input, unsigned int sleepSec);
@@ -75,17 +78,6 @@ struct Creature{
         status = current;
         state.assign(4,0);
         face = faces[status];
-
-        // if (status == 0){
-        //     name = "egg";
-        //     // memcpy(&face, &egg, 8);
-        //     face = faces[0s
-        // }
-        // else{
-        //     name = "immature";
-        //     // memcpy(&face, &immature, 8);
-        //     face = {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42};
-        // }
     }
 };
 
@@ -169,6 +161,29 @@ int main() {
 
 
 /* Operate functions*/
+void IdleAnimation(
+    vector<unsigned char> pic, vector<unsigned char> shiftedPic,
+    vector<unsigned char>& draw, bool& isShift, unsigned int& start){
+
+    unsigned int cur = clock();
+    if (isShift){
+        if (cur - start > 3000){
+            isShift = !isShift;
+            start = cur;
+            draw = pic;
+        }
+    }
+    else {
+        if (cur - start > 1000){
+            isShift = !isShift;
+            start = cur;
+            face = shiftedPic;
+        }
+    }
+    drawDotMTX(draw, 250000);
+
+}
+
 void gameDescription(){
     printClcd("    type of          cares      ");
     int tactSwInput = 0;
