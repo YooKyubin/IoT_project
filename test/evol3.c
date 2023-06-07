@@ -219,7 +219,7 @@ void main()
     }
 
     //dot_mtx = open(dot, O_RDWR);
-    write(dot_mtx, &c[9], sizeof(c[8])); 
+    write(dot_mtx, &c[8], 8); 
     sleep(3);
     close(dot_mtx);
     return ;
