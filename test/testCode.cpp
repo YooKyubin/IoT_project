@@ -146,7 +146,7 @@ int main() {
             bool toggle = true;
             vector<unsigned char> draw = figure[next];
             vector<unsigned char> shiftedPic(8);
-            for (int i=0; i<8; i++) shiftedPic[i] = figure[next] << 1;
+            for (int i=0; i<8; i++) shiftedPic[i] = figure[next][i] << 1;
             unsigned int start = clock();
             while (tatcSwInput == 0){
                 IdleAnimation(figure[next], shiftedPic, draw, toggle, start);
