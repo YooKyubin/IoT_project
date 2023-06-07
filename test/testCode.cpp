@@ -21,6 +21,7 @@
 
 using namespace std;
 
+void gameDescription();
 bool game_care();
 void trainingResult(int successRate, vector<int> trainings);
 bool train(int& successRate, vector<int>& trainings, string& trainClcd, unsigned char pre_dipSwInput, unsigned char& dipSwInput);
@@ -92,16 +93,7 @@ Creature creature;
 
 int main() {
     
-    printClcd("Press any key to start Game");
-    while (true){
-        int tactSwInput = 0;
-        getTactSw(tactSwInput);
-        if (tactSwInput == 0) continue;
-        else{
-            cout << "Current tact switch input : " << tactSwInput << endl;
-            break;
-        }
-    }
+    gameDescription();
     clearClcd();
 
     // GAME START
@@ -114,7 +106,7 @@ int main() {
         unsigned char dipSwInput;
         getDipSw(dipSwInput);
         if (dipSwInput != 0){
-            printClcd("    Please init     dip switch  ");
+            printClcd("  Please init      dip switch   ");
             while(dipSwInput != 0){
                 drawDotMTX(creature.face, 250000); // dot 매트릭스에 계속 띄워두기 위함
                 getDipSw(dipSwInput);
@@ -177,7 +169,32 @@ int main() {
 
 
 /* Operate functions*/
-// int check_gameover_1(unsigned int score_run,unsigned int score_fly,unsigned int score_swim)
+void gameDescription(){
+    printClcd("    type of          cares      ");
+    int tactSwInput = 0;
+    while (tactSwInput == 0){
+        getTactSw(tactSwInput);
+    }
+
+    tactSwInput = 0;
+    printClcd("1. feed 2. wash 3. play 4. sleep");
+    while (tactSwInput == 0){
+        getTactSw(tactSwInput);
+    }
+
+    tactSwInput = 0;
+    printClcd("    type of        trainings    ");
+    while (tactSwInput == 0){
+        getTactSw(tactSwInput);
+    }
+
+    tactSwInput = 0;
+    printClcd("1. run   2. fly 3. swim  4. hunt");
+    while (tactSwInput == 0){
+        getTactSw(tactSwInput);
+    }
+}
+
 bool check_gameover_1()
 {
     int threshold_score_run = 3;  //달리기 점수 임계값
