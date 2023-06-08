@@ -182,6 +182,7 @@ void IdleAnimation(
     unsigned int cur = clock();
     if (toggle){
         if (cur - start > 3000){
+            cout << cur << " - " << start << endl;
             toggle = !toggle;
             start = cur;
             draw = shiftedPic;
@@ -189,6 +190,7 @@ void IdleAnimation(
     }
     else {
         if (cur - start > 1000){
+            cout << cur << " - " << start << endl;
             toggle = !toggle;
             start = cur;
             draw = pic;
@@ -364,7 +366,7 @@ bool train(int& successRate, vector<int>& trainings,
 
     if ( training > 4 ){
         //잘못된 입력
-        printClcd("  Wroing Input! ");
+        printClcd("  Wrong Input! ");
         usleep(500000);
     }
     else{
