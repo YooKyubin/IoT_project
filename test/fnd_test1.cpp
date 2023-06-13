@@ -26,9 +26,17 @@ unsigned char fnd_number[10] = { (unsigned char)~0x3f, (unsigned char)~0x06, (un
 int fnds;
 
 int main() {
-    printFnd(999);
+    printFnd(1234);
+    printFnd(1230);
+    printFnd(1203);
+    printFnd(1023);
+    printFnd(1004);
+    printFnd(909);
+    printFnd(990);
     printFnd(88);
-    printFnd(7);    
+    printFnd(80);
+    printFnd(7); 
+    printFnd(0);   
     return 0;
 }
 
