@@ -53,8 +53,6 @@ int printFnd(int input) {
         data[1] = fnd_number[hundreds];
         data[2] = fnd_number[tens];
         data[3] = fnd_number[ones];
-    } else {
-        data[0] = fnd_number[thousands];
     }
 
     if (thousands == 0 && hundreds == 0 && tens != 0) {
