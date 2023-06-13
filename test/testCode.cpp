@@ -9,7 +9,7 @@
 #include <sys/types.h> 		// 시스템에서 사용하는 자료형 정보
 #include <sys/ioctl.h> 		// 하드웨어의 제어와 상태 정보
 #include <sys/stat.h> 		// 파일의 상태에 대한 정보
-#include <time.h> 			// 시간 관련
+#include <sys/time.h> 			// 시간 관련
 #include <stdlib.h>
 
 #define fnd "/dev/fnd" 		// 7-Segment FND 
@@ -30,7 +30,7 @@ int determineNext();
 void evolAnimation(vector<unsigned char> cur, vector<unsigned char> next);
 void IdleAnimation(
     vector<unsigned char> pic, vector<unsigned char> shiftedPic,
-    vector<unsigned char>& draw, bool& toggle, unsigned int& start);
+    vector<unsigned char>& draw, bool& toggle);
 
 void print_dot_mtx_gameover();
 int printFnd(int input, unsigned int sleepSec);
@@ -81,6 +81,7 @@ struct Creature{
 };
 
 Creature creature;
+struct timeval cur, start;
 
 int main() {
     
@@ -91,15 +92,22 @@ int main() {
     bool gameOver = false;
     for (int status=0; status < 2; status++){
         creature.init(status);
-        drawDotMTX(creature.face, 2000000);
-        
+
+        // 애니메이션을 위한 변수
+        vector<unsigned char> draw = creature.face;
+        vector<unsigned char> shiftedPic(8);
+        bool toggle = true;
+        for (int i=0; i<8; i++) shiftedPic[i] = creature.face[i] << 1;
+
         int day = 0;
         unsigned char dipSwInput;
         getDipSw(dipSwInput);
         if (dipSwInput != 0){
             printClcd("  Please init      dip switch   ");
+            gettimeofday(&start, NULL);
             while(dipSwInput != 0){
-                drawDotMTX(creature.face, 250000); // dot 매트릭스에 계속 띄워두기 위함
+                // drawDotMTX(creature.face, 250000); // dot 매트릭스에 계속 띄워두기 위함
+                IdleAnimation(creature.face, shiftedPic, draw, toggle);
                 getDipSw(dipSwInput);
             }
             clearClcd();
@@ -107,7 +115,7 @@ int main() {
 
         while (dipSwInput < 255){ // repeat 8
             unsigned char pre_dipSwInput = dipSwInput;
-            int successRate = 90; // 성공확률이 110이면 이상하다는 의견을 반영하여 90 시작
+            int successRate = 900; // 성공확률이 110이면 이상하다는 의견을 반영하여 90 시작
             if (game_care()) successRate += 10;
 
             vector<int> trainings;
@@ -130,6 +138,7 @@ int main() {
     if (!gameOver){
         // 3rd operate function();
         int next = determineNext();
+        //int next = 4;
         cout << next << endl;
         if (next != 0){
             vector<string> animal {
@@ -147,9 +156,9 @@ int main() {
             vector<unsigned char> draw = figure[next];
             vector<unsigned char> shiftedPic(8);
             for (int i=0; i<8; i++) shiftedPic[i] = figure[next][i] << 1;
-            unsigned int start = clock();
+            gettimeofday(&start, NULL);
             while (tatcSwInput == 0){
-                IdleAnimation(figure[next], shiftedPic, draw, toggle, start);
+                IdleAnimation(figure[next], shiftedPic, draw, toggle);
                 getTactSw(tatcSwInput);
             }
         }
@@ -177,20 +186,20 @@ int main() {
 /* Operate functions*/
 void IdleAnimation(
     vector<unsigned char> pic, vector<unsigned char> shiftedPic,
-    vector<unsigned char>& draw, bool& toggle, unsigned int& start){
+    vector<unsigned char>& draw, bool& toggle){
 
-    unsigned int cur = clock();
+    gettimeofday(&cur, NULL);
     if (toggle){
-        if (cur - start > 3000){
+        if (cur.tv_sec - start.tv_sec >= 3 && cur.tv_usec > start.tv_usec){
             toggle = !toggle;
-            start = cur;
+            gettimeofday(&start, NULL);
             draw = shiftedPic;
         }
     }
     else {
-        if (cur - start > 1000){
+        if (cur.tv_sec - start.tv_sec >= 1 && cur.tv_usec > start.tv_usec){
             toggle = !toggle;
-            start = cur;
+            gettimeofday(&start, NULL);
             draw = pic;
         }
     }
@@ -323,10 +332,16 @@ bool game_care() {
 
 	int tactInput = 0;
 
+    vector<unsigned char> draw = creature.face;
+    vector<unsigned char> shiftedPic(8);
+    bool toggle = true;
+    for (int i=0; i<8; i++) shiftedPic[i] = creature.face[i] << 1;
+    gettimeofday(&start, NULL);
 	while (tactInput == 0) {
 		getTactSw(tactInput);
 		usleep(1000);
-        drawDotMTX(creature.face, 250000);
+        // drawDotMTX(creature.face, 250000);
+        IdleAnimation(creature.face, shiftedPic, draw, toggle);
 	}
 
 	if (random_index + 1 == tactInput) {
@@ -347,14 +362,20 @@ bool train(int& successRate, vector<int>& trainings,
     string& trainClcd, unsigned char pre_dipSwInput, unsigned char& dipSwInput){
 
     // if ( 돌봐주기 성공 ) { successRate += 10; }
+    vector<unsigned char> draw = creature.face;
+    vector<unsigned char> shiftedPic(8);
+    bool toggle = true;
+    for (int i=0; i<8; i++) shiftedPic[i] = creature.face[i] << 1;
+
     int training = 0;
     printClcd(trainClcd);
-    
     printFnd(successRate, 1000000);
+    gettimeofday(&start, NULL);
     while (training == 0){
         getTactSw(training);
         usleep(1000);
-        drawDotMTX(creature.face, 250000);
+        // drawDotMTX(creature.face, 250000);
+        IdleAnimation(creature.face, shiftedPic, draw, toggle);
 
         getDipSw(dipSwInput);
         if (pre_dipSwInput != dipSwInput){
