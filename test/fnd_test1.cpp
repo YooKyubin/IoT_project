@@ -28,14 +28,9 @@ int fnds;
 int main() {
     printFnd(909);
     printFnd(990);
-    printFnd(100);
-    printFnd(90);
     printFnd(88);
     printFnd(80);
-    printFnd(53);
-    printFnd(30);
-    printFnd(7); 
-    printFnd(0);   
+    printFnd(7);    
     return 0;
 }
 
@@ -47,13 +42,17 @@ int printFnd(int input) {
     int tens = input / 10 % 10;
     int ones = input / 1 % 10;
     
-    if (thousands == 0 && hundreds != 0) {
+    if (thousands != 0) {
+        data[0] = fnd_number[thousands];
+        data[1] = fnd_number[hundreds];
+        data[2] = fnd_number[tens];
+        data[3] = fnd_number[ones];
+    } else if (thousands == 0 && hundreds != 0){
         data[0] = ~((unsigned char)0);
         data[1] = fnd_number[hundreds];
         data[2] = fnd_number[tens];
         data[3] = fnd_number[ones];
-
-    if (thousands == 0 && hundreds == 0 && tens != 0) {
+    } else if (thousands == 0 && hundreds == 0 && tens != 0) {
         data[0] = ~((unsigned char)0);
         data[1] = ~((unsigned char)0);
         data[2] = fnd_number[tens];
@@ -70,8 +69,6 @@ int printFnd(int input) {
         data[3] = fnd_number[ones];
     }
 
-    
-
     fnds = open(fnd, O_RDWR);
     if (fnds < 0) {
     	cout << "can't find Dev driver" << endl;
@@ -83,4 +80,3 @@ int printFnd(int input) {
     return 0;
 }
 
-}
