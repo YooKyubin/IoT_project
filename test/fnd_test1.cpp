@@ -30,7 +30,8 @@ int main() {
     printFnd(990);
     printFnd(88);
     printFnd(80);
-    printFnd(7);    
+    printFnd(7);
+    printFnd(0);    
     return 0;
 }
 
@@ -57,17 +58,19 @@ int printFnd(int input) {
         data[1] = ~((unsigned char)0);
         data[2] = fnd_number[tens];
         data[3] = fnd_number[ones];
-    } else if (thousands == 0 && hundreds == 0 && tens == 0 && ones != 0){
+    } else if (thousands == 0 && hundreds == 0 && tens == 0){
         data[0] = ~((unsigned char)0);
         data[1] = ~((unsigned char)0);
         data[2] = ~((unsigned char)0);
         data[3] = fnd_number[ones];
+    /*
     } else if (thousands == 0 && hundreds == 0 && tens == 0 && ones == 0){
         data[0] = ~((unsigned char)0);
         data[1] = ~((unsigned char)0);
         data[2] = ~((unsigned char)0);
         data[3] = fnd_number[ones];
     }
+    */
 
     fnds = open(fnd, O_RDWR);
     if (fnds < 0) {
