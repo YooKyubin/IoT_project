@@ -63,8 +63,8 @@ int printFnd(int input) {
         data[1] = ~((unsigned char)0);
         data[2] = ~((unsigned char)0);
         data[3] = fnd_number[ones];
-    /*
-    } else if (thousands == 0 && hundreds == 0 && tens == 0 && ones == 0){
+   
+    }  /* else if (thousands == 0 && hundreds == 0 && tens == 0 && ones == 0){
         data[0] = ~((unsigned char)0);
         data[1] = ~((unsigned char)0);
         data[2] = ~((unsigned char)0);
