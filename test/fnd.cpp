@@ -37,6 +37,7 @@ int main() {
 
 int printFnd(int input, unsigned int sleepSec){
     vector<unsigned char> data(4, fnd_number[0]);
+    
     data[0] = fnd_number[ input / 1000  % 10 ];
     data[1] = fnd_number[ input / 100   % 10 ];
     data[2] = fnd_number[ input / 10    % 10 ];
