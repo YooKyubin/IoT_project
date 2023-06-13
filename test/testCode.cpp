@@ -385,7 +385,7 @@ bool train(int& successRate, vector<int>& trainings,
 
     if ( training > 4 ){
         //잘못된 입력
-        printClcd("  Wroing Input! ");
+        printClcd("  Wrong Input! ");
         usleep(500000);
     }
     else{
