@@ -2,23 +2,39 @@
 
 게임 시작 전 간단 메뉴얼 clcd로 출력
 
+<img src="imgs/type_of_cares.jpg" width="300px"/> <img src="imgs/care_list.jpg" width="300px"/>
+<img src="imgs/type_of_train.jpg" width="300px"/> <img src="imgs/train_list.jpg" width="300px"/>
+
+
 dip switch 초기화 확인
+
+<p>
+	<img src="gif/init_dipSW.gif" width="500px">
+</p>
+
 
 돌봐주기 
 - 질문
-<br/>
 
-![](imgs/care_list.jpg){: width="100" height="100"}
-
-<br/>
-
-![ezgif com-video-to-gif](https://github.com/leejongseok1/digivice/assets/79849878/1a5bd0e0-59a1-4c8c-91ba-4c43a0474ab0)
+<p>
+	<img src="gif/돌보기.gif" width="500px">
+</p>
 
 - 성공
 
-![caresuccess](https://github.com/leejongseok1/digivice/assets/79849878/60da27c1-dda2-4534-be47-096df6bd95dc)
+<p>
+	<img src="gif/돌보기성공-.gif" width="500px">
+</p>
+
 
 - 실패
+
+- 예외처리
+ 
+<p>
+	<img src="gif/돌보기_예외처리-.gif" width="500px">
+</p>
+
 
 훈련하기
 - 성공확률
@@ -26,17 +42,120 @@ dip switch 초기화 확인
 - dip switch 작동시 성공(clcd, dot matrix)
 - dip switch 작동시 실패(clcd, dot matrix)
 
+<p>
+	<img src="gif/훈련성공.gif" width="500px">
+</p>
+
+- 예외처리
+
+<p>
+	<img src="gif/훈련_예외처리.gif" width="500px">
+</p>
+
 dip switch 8개 모두 작동 시 진화
 - 진화 애니메이션
+  - 알 -> 유년기
+<p>
+	<img src="gif/evolution.gif" width="500px">
+</p>
+<br/>
+<br/>
+<br/>
 
-유년기에서 성체가 되는 진화
+  - 유년기 -> 성체
+<p>
+	<img src="gif/evolution2.gif" width="500px">
+</p>
+
 
 진화 실패모습 (게임 오버)
 
-애완동물의 애니메이션
+<p>
+	<img src="gif/gameover.gif" width="500px">
+</p>
+
 
 # 펫 애니메이션
-![image_egg](https://github.com/leejongseok1/digivice/assets/79849878/172a2076-7173-4a98-b377-bdac0b441011)
+<br/>
+
+### 알
+<p>
+	<img src="gif/image_egg.gif" width="300px">        <img src="gif/egg.gif" width="300px">
+</p>
+
+<br/>
+<br/>
+<br/>
+
+### 유년기
+
+<p>
+	<img src="gif/image_baby.gif" width="300px">         <img src="gif/child.gif" width="300px">
+</p>
+
+<br/>
+<br/>
+<br/>
+
+### 사슴
+
+<p>
+	<img src="gif/image_deer.gif" width="300px">         <img src="gif/doot_deer.gif" width="300px">
+</p>
+
+<br/>
+<br/>
+<br/>
+
+### 거북이
+
+<p>
+	<img src="gif/image_turtle.gif" width="300px">         <img src="gif/dot_turtle.gif" width="300px">
+</p>
+
+<br/>
+<br/>
+<br/>
+
+### 독수리
+
+<p>
+	<img src="gif/image_eagle.gif" width="300px">         <img src="gif/dot_eagle.gif" width="300px">
+</p>
+
+<br/>
+<br/>
+<br/>
+
+### 잠자리
+
+<p>
+	<img src="gif/image_dragonfly.gif" width="300px">         <img src="gif/dot_dragonfly.gif" width="300px">
+</p>
+
+<br/>
+<br/>
+<br/>
+
+### 해파리
+
+<p>
+	<img src="gif/image_jellyfish.gif" width="300px">         <img src="gif/dot_jellyfish.gif" width="300px">
+</p>
+
+<br/>
+<br/>
+<br/>
+
+### 돌고래
+
+<p>
+	<img src="gif/image_dolphin.gif" width="300px">         <img src="gif/dot_dolphin.gif" width="300px">
+</p>
+
+<br/>
+<br/>
+<br/>
 
 
 # 개발 과정
