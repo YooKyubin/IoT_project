@@ -6,6 +6,7 @@
 
 <img src="imgs/type_of_train.jpg" width="300px"/> <img src="imgs/train_list.jpg" width="300px"/>
 
+<br/>
 
 dip switch 초기화 확인
 
@@ -13,6 +14,7 @@ dip switch 초기화 확인
 	<img src="gif/init_dipSW.gif" width="500px">
 </p>
 
+<br/>
 
 돌봐주기 
 - 질문
@@ -30,21 +32,39 @@ dip switch 초기화 확인
 
 - 실패
 
+<p>
+	<img src="imgs/돌봐주기-실패.png" width="500px">
+</p>
 - 예외처리
  
 <p>
 	<img src="gif/돌보기_예외처리.gif" width="500px">
 </p>
 
+<br/>
 
 훈련하기
-- 성공확률
-- tact switch 상호작용
+- 성공확률, tact switch 상호작용
+
+<p>
+	<img src="imgs/훈련-성공확률.png" width="500px">
+</p>
+
 - dip switch 작동시 성공(clcd, dot matrix)
+
+<p>
+	<img src="imgs/훈련-성공.png" width="500px">
+	<br/>
+	<img src="imgs/훈련-성공2.png" width="300px">
+	<img src="imgs/훈련-성공3.png" width="300px">
+	<img src="imgs/훈련-성공4.png" width="300px">
+</p>
+
+
 - dip switch 작동시 실패(clcd, dot matrix)
 
 <p>
-	<img src="gif/훈련성공.gif" width="500px">
+	<img src="imgs/훈련-실패.png" width="500px">
 </p>
 
 - 예외처리
@@ -53,14 +73,15 @@ dip switch 초기화 확인
 	<img src="gif/훈련_예외처리.gif" width="500px">
 </p>
 
+<br/>
+
 dip switch 8개 모두 작동 시 진화
 - 진화 애니메이션
   - 알 -> 유년기
 <p>
 	<img src="gif/evolution.gif" width="400px">
 </p>
-<br/>
-<br/>
+
 <br/>
 
   - 유년기 -> 성체
@@ -68,6 +89,7 @@ dip switch 8개 모두 작동 시 진화
 	<img src="gif/evolution2.gif" width="400px">
 </p>
 
+<br/>
 
 진화 실패모습 (게임 오버)
 
