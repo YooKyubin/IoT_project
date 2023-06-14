@@ -25,7 +25,7 @@ dip switch 8개 모두 작동 시 진화
 애완동물의 애니메이션
 
 # 사이버 애완동물의 이미지
-
+![](imgs/gif/image_egg.gif)  ![](imgs/gif/dot_egg.gif)
 
 # 개발 과정
 ## 2주차
