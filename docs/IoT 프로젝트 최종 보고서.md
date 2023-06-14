@@ -56,7 +56,7 @@ dip switch 8개 모두 작동 시 진화
 - 진화 애니메이션
   - 알 -> 유년기
 <p>
-	<img src="gif/evolution.gif" width="500px">
+	<img src="gif/evolution.gif" width="400px">
 </p>
 <br/>
 <br/>
@@ -64,14 +64,14 @@ dip switch 8개 모두 작동 시 진화
 
   - 유년기 -> 성체
 <p>
-	<img src="gif/evolution2.gif" width="500px">
+	<img src="gif/evolution2.gif" width="400px">
 </p>
 
 
 진화 실패모습 (게임 오버)
 
 <p>
-	<img src="gif/gameover.gif" width="500px">
+	<img src="gif/gameover.gif" width="400px">
 </p>
 
 
