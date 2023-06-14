@@ -6,12 +6,19 @@ dip switch 초기화 확인
 
 돌봐주기 
 - 질문
+- 
 <br/>
+
 ![care_list.jpg]()
+
 <br/>
+
 ![ezgif com-video-to-gif](https://github.com/leejongseok1/digivice/assets/79849878/1a5bd0e0-59a1-4c8c-91ba-4c43a0474ab0)
+
 - 성공
+
 ![caresuccess](https://github.com/leejongseok1/digivice/assets/79849878/60da27c1-dda2-4534-be47-096df6bd95dc)
+
 - 실패
 
 훈련하기
