@@ -6,10 +6,9 @@ dip switch 초기화 확인
 
 돌봐주기 
 - 질문
-- 
 <br/>
 
-![](imgs/care_list.jpg)
+![](imgs/care_list.jpg){: width="100" height="100"}
 
 <br/>
 
