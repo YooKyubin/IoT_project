@@ -55,9 +55,9 @@ dip switch 초기화 확인
 <p>
 	<img src="imgs/훈련-성공.png" width="500px">
 	<br/>
-	<img src="imgs/훈련-성공2.png" width="300px">
-	<img src="imgs/훈련-성공3.png" width="300px">
-	<img src="imgs/훈련-성공4.png" width="300px">
+	<img src="imgs/훈련-성공2.png" width="300px"> <br/>
+	<img src="imgs/훈련-성공3.png" width="300px"> <br/>
+	<img src="imgs/훈련-성공4.png" width="300px"> 
 </p>
 
 
