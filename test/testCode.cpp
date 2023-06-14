@@ -566,7 +566,7 @@ int clearClcd(){
     unsigned char clear[32];
     memset(clear, 0, 32);
     if (clcds < 0){
-        cout << "can't find Dev dirver" << endl;
+        cout << "can't find Dev driver" << endl;
         return -1; 
     }
 
@@ -579,7 +579,7 @@ int printClcd(string str){
     clcds = open(clcd, O_RDWR);
 
     if (clcds < 0){
-        cout << "can't find Dev dirver" << endl;
+        cout << "can't find Dev driver" << endl;
         return -1; 
     }
 
@@ -605,7 +605,7 @@ int getTactSw(int& input){
 int drawDotMTX(unsigned char& input, unsigned int sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
-        cout << "can't find Dev dirver" << endl;
+        cout << "can't find Dev driver" << endl;
         return -1; 
     }
     write(dotMtx, &input, 8);
@@ -617,7 +617,7 @@ int drawDotMTX(unsigned char& input, unsigned int sleepSec){
 int drawDotMTX(vector<unsigned char>& input, unsigned int sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
-        cout << "can't find Dev dirver" << endl;
+        cout << "can't find Dev driver" << endl;
         return -1; 
     }
     write(dotMtx, input.data(), 8);
