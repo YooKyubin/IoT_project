@@ -9,7 +9,7 @@ dip switch 초기화 확인
 - 
 <br/>
 
-![docs/imgs/care_list.jpg]()
+![](docs/imgs/care_list.jpg)
 
 <br/>
 
