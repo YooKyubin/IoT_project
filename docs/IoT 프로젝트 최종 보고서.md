@@ -32,7 +32,7 @@ dip switch 초기화 확인
 - 예외처리
  
 <p>
-	<img src="gif/돌보기_예외처리-.gif" width="500px">
+	<img src="gif/돌보기_예외처리.gif" width="500px">
 </p>
 
 
