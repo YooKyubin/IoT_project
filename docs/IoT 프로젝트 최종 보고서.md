@@ -2,7 +2,7 @@
 
 게임 시작 전 간단 메뉴얼 clcd로 출력
 
-<img src="imgs/type_of_cares.jpg" width="300px"/> <img src="imgs/care_list.jpg" width="300px"/>
+<img src="imgs/type_of_cares.jpg" width="300px"/> <img src="imgs/care_list.jpg" width="270px"/>
 <img src="imgs/type_of_train.jpg" width="300px"/> <img src="imgs/train_list.jpg" width="300px"/>
 
 
