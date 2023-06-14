@@ -360,6 +360,13 @@ bool game_care() {
 		usleep(1000);
         // drawDotMTX(creature.face, 250000);
         IdleAnimation(creature.face, creature.shiftedFace, draw, toggle);
+        if ( tactInput > 4 ){
+            //잘못된 입력
+            printClcd("  Wrong Input! ");
+            drawDotMTX(figure[7], 500000);
+            // usleep(500000);
+            tactInput = 0;
+        }
 	}
 
 	if (random_index + 1 == tactInput) {
@@ -367,12 +374,6 @@ bool game_care() {
         drawDotMTX(*smile, 1500000);
 		return true;
 	}
-    else if ( tactInput > 4 ){
-        //잘못된 입력
-        printClcd("  Wrong Input! ");
-        drawDotMTX(figure[7], 500000)
-        // usleep(500000);
-    }
 	else {
 		printClcd(" Failed to care ");
         drawDotMTX(*TT, 1500000);
@@ -410,6 +411,7 @@ bool train(int& successRate, vector<int>& trainings,
                     getDipSw(dipSwInput);
                     drawDotMTX(figure[7], 250000);
                 }
+                printClcd(trainClcd);
             }
         }
     }
@@ -417,7 +419,7 @@ bool train(int& successRate, vector<int>& trainings,
     if ( training > 4 ){
         //잘못된 입력
         printClcd("  Wrong Input! ");
-        drawDotMTX(figure[7], 500000)
+        drawDotMTX(figure[7], 500000);
         // usleep(500000);
     }
     else{
