@@ -338,7 +338,7 @@ void print_dot_mtx_gameover() // 게임 오버 표시 도트 매트릭스 표현
 }
 
 bool game_care() {
-
+    srand((unsigned int)time(NULL));
 	string care_arr[4] = {"  My pet looks      hungry", 
                             "  My pet looks      dirty", 
                             "  My pet looks      bored", 
