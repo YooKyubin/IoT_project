@@ -203,6 +203,7 @@ dip switch 8개 모두 작동 시 진화
 - 애니메이션 주기를 `clock()` 대신 `gettimeofday()` 함수를 이용하여 애니메이션 주기 통제
 - 진화 애니메이션 추가
 - fnd 출력 함수 재 작성
+- tact switch, dip swtich 예외 입력 처리
 
 # 핵심 코드
 
@@ -241,8 +242,8 @@ void IdleAnimation(
     drawDotMTX(draw, 250000);
 }
 ```
->단순히 `sleep()`으로 애니메이션의 지속시간을 설정하지 않았기 때문에 
->tact switch, dip switch의 입력을 받으면서 dot matrix에서 애니메이션을 연출 할 수 있다.
+>단순히 `sleep()`으로 애니메이션의 지속시간을 설정하지 않았기 때문에  
+>tact switch, dip switch의 입력을 받으면서 dot matrix에서 애니메이션을 연출 할 수 있다.  
 >기존 `drawDotMTX()` 함수를 사용하는 곳이면 어디든 대체하여 사용이 가능하다.
 
 중첩 반복문 탈출
@@ -287,7 +288,10 @@ bool train(int& successRate, vector<int>& trainings,
 	return true;
 }
 ```
->tact switch 입력시 내부 반복문이 종료, dip switch 입력시 전체 반복문이 종료된다.
+>tact switch 입력시 내부 반복문이 종료, dip switch 입력시 전체 반복문이 종료된다.  
+>중첩 반복문을 종료하기 위해서는 내부의 반복문이 우선적으로 종료되어야 외부의 반복문도 종료가 가능한데,  
+>이를 함수로 만들고 외부 반복문의 종료조건 시 false 를 리턴하며 중첩 반복문이 종료된다.
+
 
 # 프로그램 실행 영상
 
@@ -296,19 +300,40 @@ bool train(int& successRate, vector<int>& trainings,
 - 게임 시작 전 간단한 설명 제시
 - `srand((unsigned int)time(NULL))`를 이용하여 다양한 랜덤값 생성
 - `1`, `2`, `3`, `4`를 제외한 다른 tact swtich 입력에 대한 예외 처리
+- 잘못된 dip switch 동작 예외 처리
 - 생동감을 위한 애완동물의 IDLE 애니메이션 제작
 - 애완 동물의 진화 연출 제작
 - 돌봐주기, 훈련의 성공과 실패 시의 연출
+- fnd 출력 중 필요없는 부분 제거
 
 ## 독창성
 - 프로젝트의 아이디어(주제) 중복 없음
-- 기존에 없던 게임, 새로운 규칙 작성성
+- 기존에 없던 게임, 새로운 규칙 작성
 - 기본적인 입출력 장치의 사용방법을 제외하고 타 프로젝트의 코드를 참고하지 않음
 - 우리 프로젝트만의 애니메이션 알고리즘 작성
 - 알, 유년기 모습의 dot 이미지 직접 생성
 
-# 아쉬운 점
-roll back dip switch
 
 # 참고 문헌
+c++ 기본 문법 참고
+- [https://scarlettb.tistory.com/5](https://scarlettb.tistory.com/5) 
+- [https://danco.tistory.com/69](https://danco.tistory.com/69) 
+- [https://bubble-dev.tistory.com/entry/CC-write](https://bubble-dev.tistory.com/entry/CC-write)
+- [https://bubble-dev.tistory.com/entry/CC-read-%ED%95%A8%EC%88%98-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%9D%BD%EB%8A%94-%ED%95%A8%EC%88%98](https://bubble-dev.tistory.com/entry/CC-read-%ED%95%A8%EC%88%98-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%9D%BD%EB%8A%94-%ED%95%A8%EC%88%98)
 
+fnd 참고
+- [https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=almdri02&logNo=150123104874](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=almdri02&logNo=150123104874)
+- [https://github.com/jinwoo1225/SnakeGameWithSmart4412/blob/main/Snake/FND.cpp](https://github.com/jinwoo1225/SnakeGameWithSmart4412/blob/main/Snake/FND.cpp)
+
+입출력 장치 참고
+- [https://cccding.tistory.com/category/Embedded/Kernel%20Porting](https://cccding.tistory.com/category/Embedded/Kernel%20Porting)
+- [https://github.com/jinwoo1225/SnakeGameWithSmart4412](https://github.com/jinwoo1225/SnakeGameWithSmart4412)
+
+난수 생성
+- [https://blockdmask.tistory.com/308](https://blockdmask.tistory.com/308)
+- [https://coding-factory.tistory.com/666](https://coding-factory.tistory.com/666)
+
+`gettimeofday()`함수 참고
+- https://mozi.tistory.com/127
+- https://blog.naver.com/PostView.naver?blogId=japchae153&logNo=222295431893&parentCategoryNo=&categoryNo=35&viewDate=&isShowPopularPosts=true&from=search
+- https://bywords.tistory.com/entry/CLinux-gettimeofday%EB%A1%9C-%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EC%B4%88-%EB%8B%A8%EC%9C%84-%EC%B8%A1%EC%A0%95%ED%95%98%EA%B8%B0
