@@ -74,8 +74,12 @@ vector<vector<unsigned char>> figure {
     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}    //초기화
 };
 vector<vector<unsigned char>> faces {
-    {0x18, 0x34, 0x7a, 0xfa, 0xff, 0xff, 0x7e, 0x3c}, // egg2
-    {0x00, 0x66, 0x3c, 0x7e, 0x56, 0xba, 0x46, 0x7e}  // 유년기5
+    {0x18, 0x34, 0x7a, 0xfa, 0xff, 0xff, 0x7e, 0x3c},   // egg2
+    {0x00, 0x66, 0x3c, 0x7e, 0x5a, 0x7e, 0x66, 0x7e}    // 새 파일 유년기5
+};
+vector<vector<unsigned char>> shiftedFaces{
+    {0x70, 0xcc, 0xf6, 0xff, 0xff, 0x7f, 0x7f, 0x3e},   // 새 파일 2
+    {0x00, 0x66, 0x3c, 0x5a, 0x7e, 0x66, 0x66, 0x7e}    //새파일6 
 };
 
 struct Creature{
@@ -83,12 +87,14 @@ struct Creature{
     string name;
     // unsigned char face[8];
     vector<unsigned char> face;
+    vector<unsigned char> shiftedFace;
     vector<int> state;
 
     void init(int current){
         status = current;
         state.assign(4,0);
         face = faces[status];
+        shiftedFace = shiftedFaces[status];
     }
 };
 
@@ -107,9 +113,9 @@ int main() {
 
         // 애니메이션을 위한 변수
         vector<unsigned char> draw = creature.face;
-        vector<unsigned char> shiftedPic(8);
+        // vector<unsigned char> shiftedPic(8);
         bool toggle = true;
-        for (int i=0; i<8; i++) shiftedPic[i] = creature.face[i] << 1;
+        // for (int i=0; i<8; i++) shiftedPic[i] = creature.face[i] << 1;
 
         int day = 0;
         unsigned char dipSwInput;
@@ -119,7 +125,7 @@ int main() {
             gettimeofday(&start, NULL);
             while(dipSwInput != 0){
                 // drawDotMTX(creature.face, 250000); // dot 매트릭스에 계속 띄워두기 위함
-                IdleAnimation(creature.face, shiftedPic, draw, toggle);
+                IdleAnimation(creature.face, creature.shiftedFace, draw, toggle);
                 getDipSw(dipSwInput);
             }
             clearClcd();
@@ -345,15 +351,15 @@ bool game_care() {
 	int tactInput = 0;
 
     vector<unsigned char> draw = creature.face;
-    vector<unsigned char> shiftedPic(8);
+    // vector<unsigned char> shiftedPic(8);
     bool toggle = true;
-    for (int i=0; i<8; i++) shiftedPic[i] = creature.face[i] << 1;
+    // for (int i=0; i<8; i++) shiftedPic[i] = creature.face[i] << 1;
     gettimeofday(&start, NULL);
 	while (tactInput == 0) {
 		getTactSw(tactInput);
 		usleep(1000);
         // drawDotMTX(creature.face, 250000);
-        IdleAnimation(creature.face, shiftedPic, draw, toggle);
+        IdleAnimation(creature.face, creature.shiftedFace, draw, toggle);
 	}
 
 	if (random_index + 1 == tactInput) {
@@ -361,6 +367,12 @@ bool game_care() {
         drawDotMTX(*smile, 1500000);
 		return true;
 	}
+    else if ( tactInput > 4 ){
+        //잘못된 입력
+        printClcd("  Wrong Input! ");
+        drawDotMTX(figure[7], 500000)
+        // usleep(500000);
+    }
 	else {
 		printClcd(" Failed to care ");
         drawDotMTX(*TT, 1500000);
@@ -375,9 +387,9 @@ bool train(int& successRate, vector<int>& trainings,
 
     // if ( 돌봐주기 성공 ) { successRate += 10; }
     vector<unsigned char> draw = creature.face;
-    vector<unsigned char> shiftedPic(8);
+    // vector<unsigned char> shiftedPic(8);
     bool toggle = true;
-    for (int i=0; i<8; i++) shiftedPic[i] = creature.face[i] << 1;
+    // for (int i=0; i<8; i++) shiftedPic[i] = creature.face[i] << 1;
 
     int training = 0;
     printClcd(trainClcd);
@@ -387,18 +399,26 @@ bool train(int& successRate, vector<int>& trainings,
         getTactSw(training);
         usleep(1000);
         // drawDotMTX(creature.face, 250000);
-        IdleAnimation(creature.face, shiftedPic, draw, toggle);
+        IdleAnimation(creature.face, creature.shiftedFace, draw, toggle);
 
         getDipSw(dipSwInput);
         if (pre_dipSwInput != dipSwInput){
-            return false;
+            if (pre_dipSwInput < dipSwInput) { return false; }
+            else {
+                printClcd("   roll back       dip switch   ");
+                while( pre_dipSwInput != dipSwInput ){
+                    getDipSw(dipSwInput);
+                    drawDotMTX(figure[7], 250000);
+                }
+            }
         }
     }
 
     if ( training > 4 ){
         //잘못된 입력
         printClcd("  Wrong Input! ");
-        usleep(500000);
+        drawDotMTX(figure[7], 500000)
+        // usleep(500000);
     }
     else{
         trainings.push_back(training);
@@ -417,11 +437,11 @@ void trainingResult(int successRate, vector<int> trainings){
     int dice = random() % 100;
     vector<int> table(4, 0);
 
+    cout << "successRate: " << dice << endl;
     // fail
     if ( successRate <= dice ){
         printClcd("Training failed");
         drawDotMTX(*TT, 1500000);
-        cout << "Training failed: " << dice << endl;
         return;
     }
 
