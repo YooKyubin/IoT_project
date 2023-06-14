@@ -423,11 +423,11 @@ void trainingResult(int successRate, vector<int> trainings){
     int dice = random() % 100;
     vector<int> table(4, 0);
 
+    cout << "successRate: " << dice << endl;
     // fail
     if ( successRate <= dice ){
         printClcd("Training failed");
         drawDotMTX(*TT, 1500000);
-        cout << "Training failed: " << dice << endl;
         return;
     }
 
