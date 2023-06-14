@@ -311,7 +311,7 @@ bool train(int& successRate, vector<int>& trainings,
 </br></br>
 
 # 프로그램 실행 영상
-##https://www.youtube.com/watch?v=L_unhSBAJqI
+## https://www.youtube.com/watch?v=L_unhSBAJqI
 </br></br>
 
 # 완성도 및 독창성
