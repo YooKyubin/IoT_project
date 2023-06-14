@@ -6,7 +6,10 @@ dip switch 초기화 확인
 
 돌봐주기 
 - 질문
+![care_list.jpg]()
+![ezgif com-video-to-gif](https://github.com/leejongseok1/digivice/assets/79849878/1a5bd0e0-59a1-4c8c-91ba-4c43a0474ab0)
 - 성공
+![caresuccess](https://github.com/leejongseok1/digivice/assets/79849878/60da27c1-dda2-4534-be47-096df6bd95dc)
 - 실패
 
 훈련하기
@@ -25,7 +28,7 @@ dip switch 8개 모두 작동 시 진화
 애완동물의 애니메이션
 
 # 펫 애니메이션
-![image_egg](https://github.com/leejongseok1/digivice/assets/79849878/172a2076-7173-4a98-b377-bdac0b441011)   ![egg](https://github.com/leejongseok1/digivice/assets/79849878/3855eb7a-2459-40d5-ae1a-2176c9004b86)
+![image_egg](https://github.com/leejongseok1/digivice/assets/79849878/172a2076-7173-4a98-b377-bdac0b441011)
 
 
 # 개발 과정
