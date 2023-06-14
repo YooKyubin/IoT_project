@@ -367,6 +367,12 @@ bool game_care() {
         drawDotMTX(*smile, 1500000);
 		return true;
 	}
+    else if ( tactInput > 4 ){
+        //잘못된 입력
+        printClcd("  Wrong Input! ");
+        drawDotMTX(figure[7], 500000)
+        // usleep(500000);
+    }
 	else {
 		printClcd(" Failed to care ");
         drawDotMTX(*TT, 1500000);
@@ -397,14 +403,22 @@ bool train(int& successRate, vector<int>& trainings,
 
         getDipSw(dipSwInput);
         if (pre_dipSwInput != dipSwInput){
-            return false;
+            if (pre_dipSwInput < dipSwInput) { return false; }
+            else {
+                printClcd("   roll back       dip switch   ");
+                while( pre_dipSwInput != dipSwInput ){
+                    getDipSw(dipSwInput);
+                    drawDotMTX(figure[7], 250000);
+                }
+            }
         }
     }
 
     if ( training > 4 ){
         //잘못된 입력
         printClcd("  Wrong Input! ");
-        usleep(500000);
+        drawDotMTX(figure[7], 500000)
+        // usleep(500000);
     }
     else{
         trainings.push_back(training);
