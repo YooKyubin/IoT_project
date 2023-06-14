@@ -49,7 +49,19 @@ int dotMtx;
 
 unsigned char smile[8] = {0x00, 0x00, 0x42, 0xA5, 0x00, 0x00, 0x00, 0x00};
 unsigned char TT[8] = {0x00, 0x00, 0xE7, 0x42, 0x42, 0x42, 0x00, 0x00};
-unsigned char fnd_number[] = {~0x3f, ~0x06, ~0x5b, ~0x4f, ~0x66, ~0x6d, ~0x7d, ~0x07, ~0x7f, ~0x67, ~0x00};
+// unsigned char fnd_number[] = {~0x3f, ~0x06, ~0x5b, ~0x4f, ~0x66, ~0x6d, ~0x7d, ~0x07, ~0x7f, ~0x67, ~0x00};
+unsigned char fnd_number[10] = { 
+    (unsigned char)~0x3f, 
+    (unsigned char)~0x06, 
+    (unsigned char)~0x5b, 
+    (unsigned char)~0x4f, 
+    (unsigned char)~0x66,
+    (unsigned char)~0x6d, 
+    (unsigned char)~0x7d, 
+    (unsigned char)~0x07, 
+    (unsigned char)~0x7f, 
+    (unsigned char)~0x67 
+};
 vector<vector<unsigned char>> figure { 
     {0x00, 0x3c, 0x7e, 0x5a, 0x66, 0x7e, 0x66, 0x42},   //유년기
     {0x00, 0x84, 0x58, 0x20, 0x6E, 0x1F, 0x29, 0x2A},   //사슴, run, fly
@@ -467,25 +479,53 @@ void evolAnimation(vector<unsigned char> cur, vector<unsigned char> next){
 }
 
 /* IO functions */
-int printFnd(int input, unsigned int sleepSec){
-
+int printFnd(int input) {
     vector<unsigned char> data(4, fnd_number[0]);
-    data[0] = fnd_number[ input / 1000  % 10 ];
-    data[1] = fnd_number[ input / 100   % 10 ];
-    data[2] = fnd_number[ input / 10    % 10 ];
-    data[3] = fnd_number[ input / 1     % 10 ];
 
-    fnds=open(fnd, O_RDWR);
+    int thousands = input / 1000 % 10;
+    int hundreds = input / 100 % 10;
+    int tens = input / 10 % 10;
+    int ones = input / 1 % 10;
+    
+    if (thousands != 0) {
+        data[0] = fnd_number[thousands];
+        data[1] = fnd_number[hundreds];
+        data[2] = fnd_number[tens];
+        data[3] = fnd_number[ones];
+    } else if (thousands == 0 && hundreds != 0){
+        data[0] = ~((unsigned char)0);
+        data[1] = fnd_number[hundreds];
+        data[2] = fnd_number[tens];
+        data[3] = fnd_number[ones];
+    } else if (thousands == 0 && hundreds == 0 && tens != 0) {
+        data[0] = ~((unsigned char)0);
+        data[1] = ~((unsigned char)0);
+        data[2] = fnd_number[tens];
+        data[3] = fnd_number[ones];
+    } else if (thousands == 0 && hundreds == 0 && tens == 0){
+        data[0] = ~((unsigned char)0);
+        data[1] = ~((unsigned char)0);
+        data[2] = ~((unsigned char)0);
+        data[3] = fnd_number[ones];
+   
+    }  /* else if (thousands == 0 && hundreds == 0 && tens == 0 && ones == 0){
+        data[0] = ~((unsigned char)0);
+        data[1] = ~((unsigned char)0);
+        data[2] = ~((unsigned char)0);
+        data[3] = fnd_number[ones];
+    }
+    */
+
+    fnds = open(fnd, O_RDWR);
     if (fnds < 0) {
-        cout << "can't find Dev dirver" << endl;
-        return -1; 
+    	cout << "can't find Dev driver" << endl;
+    	return -1;
     }
     write(fnds, data.data(), 4);
-    usleep(sleepSec);
+    usleep(2000000);
     close(fnds);
     return 0;
 }
-
 
 int getDipSw(unsigned char& input){
     dipSw = open(dip, O_RDWR);
