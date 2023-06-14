@@ -74,7 +74,7 @@ vector<vector<unsigned char>> figure {
     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}    //초기화
 };
 vector<vector<unsigned char>> faces {
-    {0x18, 0x34, 0x7a, 0xfa, 0xff, 0xff, 0x7e, 0x3c},   // egg2
+    {0x18, 0x34, 0x7a, 0x7a, 0xff, 0xff, 0x7e, 0x3c},   // egg2
     {0x00, 0x66, 0x3c, 0x7e, 0x5a, 0x7e, 0x66, 0x7e}    // 새 파일 유년기5
 };
 vector<vector<unsigned char>> shiftedFaces{
@@ -366,6 +366,7 @@ bool game_care() {
             drawDotMTX(figure[7], 500000);
             // usleep(500000);
             tactInput = 0;
+            printClcd(care_str);
         }
 	}
 
@@ -501,7 +502,7 @@ void evolAnimation(vector<unsigned char> cur, vector<unsigned char> next){
 }
 
 /* IO functions */
-int printFnd(int input) {
+int printFnd(int input, unsigned int sleepSec) {
     vector<unsigned char> data(4, fnd_number[0]);
 
     int thousands = input / 1000 % 10;
@@ -544,7 +545,7 @@ int printFnd(int input) {
     	return -1;
     }
     write(fnds, data.data(), 4);
-    usleep(2000000);
+    usleep(sleepSec);
     close(fnds);
     return 0;
 }
@@ -565,7 +566,7 @@ int clearClcd(){
     unsigned char clear[32];
     memset(clear, 0, 32);
     if (clcds < 0){
-        cout << "can't find Dev dirver" << endl;
+        cout << "can't find Dev driver" << endl;
         return -1; 
     }
 
@@ -578,7 +579,7 @@ int printClcd(string str){
     clcds = open(clcd, O_RDWR);
 
     if (clcds < 0){
-        cout << "can't find Dev dirver" << endl;
+        cout << "can't find Dev driver" << endl;
         return -1; 
     }
 
@@ -604,7 +605,7 @@ int getTactSw(int& input){
 int drawDotMTX(unsigned char& input, unsigned int sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
-        cout << "can't find Dev dirver" << endl;
+        cout << "can't find Dev driver" << endl;
         return -1; 
     }
     write(dotMtx, &input, 8);
@@ -616,7 +617,7 @@ int drawDotMTX(unsigned char& input, unsigned int sleepSec){
 int drawDotMTX(vector<unsigned char>& input, unsigned int sleepSec){
     dotMtx = open(dot, O_RDWR);
     if (dotMtx < 0) {
-        cout << "can't find Dev dirver" << endl;
+        cout << "can't find Dev driver" << endl;
         return -1; 
     }
     write(dotMtx, input.data(), 8);
