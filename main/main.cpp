@@ -133,7 +133,7 @@ int main() {
 
         while (dipSwInput < 255){ // repeat 8
             unsigned char pre_dipSwInput = dipSwInput;
-            int successRate = 900; // 성공확률이 110이면 이상하다는 의견을 반영하여 90 시작
+            int successRate = 90; // 성공확률이 110이면 이상하다는 의견을 반영하여 90 시작
             if (game_care()) successRate += 10;
 
             vector<int> trainings;
